@@ -19,10 +19,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ListView active_games_list;
     private ListView pending_games_list;
     private ListView friends_list;
-    private ArrayList<String> activeGamesList = new ArrayList<String>();
-    private ArrayAdapter<String> activeGamesArrayAdapter;
-    private ArrayList<String> pendingGamesList = new ArrayList<String>();
-    private ArrayAdapter<String> pendingGamesArrayAdapter;
+    private ArrayList<Game> activeGamesList = new ArrayList<Game>();
+    private ArrayAdapter<Game> activeGamesArrayAdapter;
+    private ArrayList<Game> pendingGamesList = new ArrayList<Game>();
+    private ArrayAdapter<Game> pendingGamesArrayAdapter;
     private ArrayList<Friend> friendsList = new ArrayList<Friend>();
     private ArrayAdapter<Friend> friendsArrayAdapter;
     private LinearLayout main_layout;
@@ -36,31 +36,28 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        GameEngine.context = getApplicationContext();
+
         active_games_list = findViewById(R.id.active_games_list);
         pending_games_list = findViewById(R.id.pending_games_list);
         friends_list = findViewById(R.id.friends_list);
 
-        activeGamesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, activeGamesList);
+        activeGamesArrayAdapter = new ArrayAdapter<Game>(this, android.R.layout.simple_list_item_1, activeGamesList);
         active_games_list.setAdapter(activeGamesArrayAdapter);
         active_games_list.setOnItemClickListener(this);
 
-        activeGamesArrayAdapter.add("hi");
-        activeGamesArrayAdapter.notifyDataSetChanged();
 
-        pendingGamesArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, pendingGamesList);
+        pendingGamesArrayAdapter = new ArrayAdapter<Game>(this, android.R.layout.simple_list_item_1, pendingGamesList);
         pending_games_list.setAdapter(pendingGamesArrayAdapter);
         pending_games_list.setOnItemClickListener(this);
 
-        pendingGamesArrayAdapter.add("you");
-        pendingGamesArrayAdapter.notifyDataSetChanged();
 
 
-        friendsArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, friendsList);
+
+        friendsArrayAdapter = new ArrayAdapter<Friend>(this, android.R.layout.simple_list_item_1, friendsList);
         friends_list.setAdapter(friendsArrayAdapter);
         friends_list.setOnItemClickListener(this);
 
-        friendsArrayAdapter.add("asdfdfdfdfdfd");
-        friendsArrayAdapter.notifyDataSetChanged();
 
         main_layout = findViewById(R.id.main_layout);
         home_layout = findViewById(R.id.home_layout);
@@ -74,6 +71,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 startActivityForResult(intent, AddFriendRequestCode);
             }
         });
+
+        initializeFields();
+    }
+
+    private void initializeFields() {
+        Friend matt=new Friend("Matthew", "7203919024");
+        Friend[]players=new Friend[]{matt,new Friend("Dad","7208786164")};
+
+        GameEngine.getFixedCardBonus();
+        GameMap gameMap=new GameMap();
+
+        activeGamesArrayAdapter.add(new Game(1,players,gameMap));
+        activeGamesArrayAdapter.notifyDataSetChanged();
+
+        pendingGamesArrayAdapter.add(new Game(2,players,gameMap));
+        pendingGamesArrayAdapter.notifyDataSetChanged();
+
+        friendsArrayAdapter.add(matt);
+        friendsArrayAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -84,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == AddFriendRequestCode) {
-            String name=data.getStringExtra(AddFriend.NAME);
-            String number=data.getStringExtra(AddFriend.NUMBER);
-            friendsArrayAdapter.add(name);
+            String name = data.getStringExtra(AddFriend.NAME);
+            String number = data.getStringExtra(AddFriend.NUMBER);
+            friendsArrayAdapter.add(new Friend(name, number));
             return;
         }
     }

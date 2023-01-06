@@ -1,0 +1,43 @@
+Country/State,Continent,Armies,Symbol,x,y,Adjacent,Continent X,Continent Y
+Alaska,North America,5,Soldier,40,310,Northwest Territory.Alberta.Kamchatka,40,210
+Northwest Territory,North America,5,Cannon,240,280,Alaska.Alberta.Quebec.Greenland,40,210
+Greenland,North America,5,Horse,640,175,Northwest Territory.Quebec.Eastern Canada.Iceland,40,210
+Alberta,North America,5,Soldier,200,370,Alaska.Northwest Territory.Quebec.Western United States,40,210
+Quebec,North America,5,Cannon,340,410,Alberta.Northwest Territory.Greenland.Eastern Canada.Eastern United States.Western United States,40,210
+Eastern Canada,North America,5,Horse,520,310,Eastern United States.Quebec.Greenland,40,210
+Western United States,North America,5,Soldier,240,460,Alberta.Quebec.Eastern United States.Central America,40,210
+Eastern United States,North America,5,Cannon,440,480,Central America.Western United States.Quebec.Eastern Canada,40,210
+Central America,North America,5,Horse,300,605,Western United States.Eastern United States.Venezuela,40,210
+Venezuela,South America,2,Soldier,310,685,Central America.Peru.Brazil,40,820
+Peru,South America,2,Cannon,310,740,Venezuela.Brazil.Argentina,40,820
+Brazil,South America,2,Horse,455,775,Venezuela.Peru.Argentina.North Africa,40,820
+Argentina,South America,2,Soldier,330,900,Peru.Brazil,40,820
+Iceland,Europe,5,Cannon,790,320,Greenland.Great Britain.Scandinavia,1020,135
+Scandinavia,Europe,5,Horse,890,260,Iceland.Great Britain.Northern Europe.Russia,1020,135
+Russia,Europe,5,Soldier,1080,310,Scandinavia.Northern Europe.Southern Europe.Middle East.Afghanistan.Ural,1020,135
+Northern Europe,Europe,5,Cannon,975,370,Scandinavia.Russia.Southern Europe.Western Europe.Great Britain,1020,135
+Great Britain,Europe,5,Horse,795,360,Iceland.Scandinavia.Northern Europe.Western Europe,1020,135
+Southern Europe,Europe,5,Soldier,945,460,Western Europe.Northern Europe.Russia.Middle East.Egypt.North Africa,1020,135
+Western Europe,Europe,5,Cannon,760,490,Great Britain.Northern Europe.Southern Europe.North Africa,1020,135
+Ural,Asia,7,Horse,1230,230,Russia.Siberia.China.Afghanistan,1450,85
+Siberia,Asia,7,Soldier,1340,270,Ural.Irkutsk.Yakutsk.Mongolia.China,1450,85
+Yakutsk,Asia,7,Cannon,1440,210,Siberia.Kamchatka.Irkutsk,1450,85
+Kamchatka,Asia,7,Horse,1555,260,Japan.Mongolia.Irkutsk.Yakutsk.Alaska,1450,85
+Irkutsk,Asia,7,Soldier,1430,320,Siberia.Yakutsk.Kamchatka.Mongolia,1450,85
+Afghanistan,Asia,7,Cannon,1130,470,Russia.Ural.China.India.Middle East,1450,85
+China,Asia,7,Horse,1350,530,Southeast Asia.India.Afghanistan.Ural.Siberia.Mongolia,1450,85
+Mongolia,Asia,7,Soldier,1410,410,China.Siberia.Irkutsk.Kamchatka.Japan,1450,85
+Japan,Asia,7,Cannon,1590,520,Mongolia.Kamchatka,1450,85
+Middle East,Asia,7,Horse,1090,570,East Africa.Egypt.Southern Europe.Afghanistan.India.Russia,1450,85
+India,Asia,7,Soldier,1240,650,Middle East.Afghanistan.China.Southeast Asia,1450,85
+Southeast Asia,Asia,7,Cannon,1370,690,India.China.Indonesia,1450,85
+North Africa,Africa,3,Horse,860,650,Brazil.Western Europe.Southern Europe.Egypt.East Africa.Central Africa,710,800
+Egypt,Africa,3,Soldier,975,660,North Africa.Southern Europe.Middle East.East Africa,710,800
+East Africa,Africa,3,Cannon,1055,740,North Africa.Egypt.Middle East.Madagascar.South Africa.Central Africa,710,800
+Central Africa,Africa,3,Horse,905,770,North Africa.East Africa.South Africa,710,800
+South Africa,Africa,3,Soldier,930,870,Central Africa.East Africa.Madagascar,710,800
+Madagascar,Africa,3,Cannon,1050,880,South Africa.East Africa,710,800
+Indonesia,Australia,2,Horse,1380,820,Southeast Asia.New Guinea.Western Australia,1575,690
+New Guinea,Australia,2,Soldier,1585,740,Eastern Australia.Indonesia,1575,690
+Eastern Australia,Australia,2,Cannon,1610,860,Western Australia.New Guinea,1575,690
+Western Australia,Australia,2,Horse,1450,890,Indonesia.Eastern Australia,1575,690
