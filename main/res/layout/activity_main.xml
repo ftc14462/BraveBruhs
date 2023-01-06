@@ -1,0 +1,110 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:showDividers="middle"
+    tools:context="com.ctecltd.bravebruhs.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/home_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/my_friends_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Friends"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ListView
+                android:id="@+id/friends_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/add_friend_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add" />
+
+        </LinearLayout>
+
+        <!--<Space-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="match_parent" />-->
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/pending_games_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pending Games"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+            <ListView
+                android:id="@+id/pending_games_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/create_game_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Game" />
+
+        </LinearLayout>
+
+
+        <!--<Space-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="match_parent" />-->
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/active_games_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Active Games"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+            <ListView
+                android:id="@+id/active_games_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <Button
+                android:id="@+id/open_game_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Open Game" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</LinearLayout>
