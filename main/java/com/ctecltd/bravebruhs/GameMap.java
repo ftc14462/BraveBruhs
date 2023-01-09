@@ -151,7 +151,26 @@ class GameMap {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Classic";
+    }
+
+    public Country getCountry(String name) {
+        for (Country country : countries) {
+            if (country.getName().equals(name)) {
+                return country;
+            }
+        }
+        return null;
+    }
+
+    public Continent getContinent(Country country) {
+        Continent matchContinent = country.getContinent();
+        for (Continent continent : continents) {
+            if (continent.equals(matchContinent)) {
+                return continent;
+            }
+        }
+        return null;
     }
 }

@@ -82,4 +82,9 @@ class Continent {
     public int getY() {
         return y;
     }
+
+    @Override
+    public String toString(){
+        return name;
+    }
 }

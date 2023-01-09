@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ctecltd.bravebruhs.TroopMovementPopup">
+
+
+    <TextView
+        android:id="@+id/troop_movement_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/from_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/troop_movement_label"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceLarge" />
+
+
+    <TextView
+        android:id="@+id/to_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/from_label"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/number_move_armies_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/to_label"
+        android:inputType="number"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceLarge" />
+
+
+
+    <Button
+        android:id="@+id/troop_movement_popup_OK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_troop_movement_popup_ok"
+        android:text="You Betcha" />
+
+    <Button
+        android:id="@+id/troop_movement_popup_CANCEL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_troop_movement_popup_cancel"
+        android:text="Nope" />
+
+
+</RelativeLayout>

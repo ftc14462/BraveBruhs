@@ -8,24 +8,31 @@ import java.util.ArrayList;
 
 
 class Player {
-    private final String color;
+
+    protected String color;
     private String name;
     private int ID;
     //    private ArrayList<Country> countries;
 //    private ArrayList<Continent> continents;
     private ArrayList<Card> cards;
     private int reserveArmies;
-    private static final String[] COLORS = {"#CC0000", "#007700", "#0000CC", "#DDDD00", "#0077CC", "#770077", "#000000", "#FF7700", "#00FF77", "#7700FF", "#77FF00", "#0077FF", "#FF0077"};
+    private static final String[] COLORS = {"#007700", "#0000CC", "#DDDD00", "#0077CC", "#770077", "#000000", "#FF7700", "#00FF77", "#7700FF", "#77FF00", "#0077FF", "#FF0077"};
     private boolean alive = true;
+    private String phoneNumber;
 
-    public Player(String name, int ID) {
+    public Player(String name, int ID, String phoneNumber) {
         this.name = name;
         this.ID = ID;
+        this.phoneNumber = phoneNumber;
 //        this.continents = new ArrayList<Continent>();
 //        this.countries = new ArrayList<Country>();
         this.cards = new ArrayList<Card>();
         this.reserveArmies = 0;
         this.color = COLORS[ID];
+    }
+
+    public Player(Friend friend, int id) {
+        this(friend.getName(), id, friend.getPhoneNumber());
     }
 
 
@@ -117,7 +124,7 @@ class Player {
         int numCountries = 0;
         int numArmies = 0;
         for (Country country : countries) {
-            if (this == country.getPlayer()) {
+            if (this.equals(country.getPlayer())) {
                 numCountries += 1;
                 numArmies += country.getArmies();
             }
@@ -143,5 +150,22 @@ class Player {
 
     public boolean isDead() {
         return !this.alive;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public boolean isComputerPlayer(){
+        return false;
+    }
+
+    public boolean isMyPlayer() {
+        return false;
+    }
+
+    @Override
+    public String toString(){
+        return name;
     }
 }

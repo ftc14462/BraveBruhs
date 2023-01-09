@@ -1,0 +1,80 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/turn_in_cards_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ctecltd.bravebruhs.TurnInCards">
+
+    <TextView
+        android:id="@+id/player_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Player Name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/turn_in_cards_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/player_name_label"
+        android:text="Turn in cards"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/turn_in_cards_radio_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/turn_in_cards_label"
+        android:orientation="vertical" />
+
+    <Button
+        android:id="@+id/turn_in_cards_OK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_turn_in_cards_ok"
+        android:text="Turn In" />
+    <Button
+        android:id="@+id/turn_in_cards_dont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/turn_in_cards_OK"
+        android:layout_marginTop="32dp"
+        android:onClick="on_turn_in_cards_cancel"
+        android:text="no way, man" />
+    <Button
+        android:id="@+id/turn_in_cards_leave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_turn_in_cards_leave"
+        android:text="outta here" />
+    <Button
+        android:id="@+id/turn_in_cards_quit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/turn_in_cards_leave"
+        android:layout_marginTop="32dp"
+        android:onClick="on_turn_in_cards_quit"
+        android:text="I quit" />
+    <Button
+        android:id="@+id/turn_in_cards_surrender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/turn_in_cards_quit"
+        android:layout_marginTop="32dp"
+        android:onClick="on_turn_in_cards_surrender"
+        android:text="I surrender" />
+
+</RelativeLayout>

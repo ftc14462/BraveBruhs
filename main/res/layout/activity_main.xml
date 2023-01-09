@@ -11,35 +11,37 @@
         android:id="@+id/home_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@color/dkblue"
+        android:dividerPadding="2dp"
         android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:layout_weight="1"
-            android:orientation="vertical">
+        <!--<LinearLayout-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_gravity="start"-->
+        <!--android:layout_weight="1"-->
+        <!--android:orientation="vertical">-->
 
-            <TextView
-                android:id="@+id/my_friends_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="My Friends"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+        <!--<TextView-->
+        <!--android:id="@+id/my_friends_label"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="My Friends"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge" />-->
 
-            <ListView
-                android:id="@+id/friends_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+        <!--<ListView-->
+        <!--android:id="@+id/friends_list"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content" />-->
 
 
-            <Button
-                android:id="@+id/add_friend_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add" />
+        <!--<Button-->
+        <!--android:id="@+id/add_friend_button"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Add" />-->
 
-        </LinearLayout>
+        <!--</LinearLayout>-->
 
         <!--<Space-->
         <!--android:layout_width="20dp"-->
@@ -62,13 +64,33 @@
             <ListView
                 android:id="@+id/pending_games_list"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/create_game_button"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create Game" />
+                android:choiceMode="singleChoice"
+                android:clickable="true"
+                android:divider="@color/dkblue"
+                android:dividerHeight="2dp"
+                android:footerDividersEnabled="true"
+                android:headerDividersEnabled="true" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/create_game_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Create Game" />
+
+                <Button
+                    android:id="@+id/open_game_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Open Game" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
@@ -95,14 +117,18 @@
             <ListView
                 android:id="@+id/active_games_list"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice"
+                android:clickable="true"
+                android:divider="@color/dkblue"
+                android:dividerHeight="2dp" />
 
 
             <Button
-                android:id="@+id/open_game_button"
+                android:id="@+id/enter_game_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Open Game" />
+                android:text="Enter Game" />
         </LinearLayout>
 
 

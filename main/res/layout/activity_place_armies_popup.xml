@@ -1,0 +1,54 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ctecltd.bravebruhs.PlaceArmiesPopup">
+
+    <TextView
+        android:id="@+id/place_armies_popup_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Place Armies"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/number_of_armies_to_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/place_armies_popup_label"
+        android:layout_centerHorizontal="true"
+        android:inputType="number" />
+
+    <TextView
+        android:id="@+id/place_armies_popup_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/number_of_armies_to_place"
+        android:layout_centerHorizontal="true"
+        android:text="card text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+    <Button
+        android:id="@+id/place_armies_popup_OK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_place_armies_popup_ok"
+        android:text="yup" />
+
+    <Button
+        android:id="@+id/place_armies_popup_CANCEL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_place_armies_popup_cancel"
+        android:text="Heck No!" />
+
+</RelativeLayout>

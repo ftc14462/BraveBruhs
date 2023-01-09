@@ -6,15 +6,23 @@ package com.ctecltd.bravebruhs;
 
 class Friend {
     private final String name;
-    private final String number;
+    private final String phoneNumber;
 
-    public Friend(String name, String number) {
+    public Friend(String name, String phoneNumber) {
         this.name = name;
-        this.number = number;
+        this.phoneNumber = phoneNumber;
     }
 
     @Override
     public String toString() {
-        return name + ": " + number;
+        return name + ": " + phoneNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 }

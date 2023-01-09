@@ -1,0 +1,37 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".EnterGame">
+
+    <TextView
+        android:id="@+id/enter_game_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/enter_game_leave_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="on_leave_click"
+            android:text="Leave" />
+
+
+
+        <Button
+            android:id="@+id/enter_game_enter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="on_enter_click"
+            android:text="Enter" />
+
+    </LinearLayout>
+</LinearLayout>
+
+

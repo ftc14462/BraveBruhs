@@ -1,0 +1,104 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ctecltd.bravebruhs.AttackPopup">
+
+
+    <TextView
+        android:id="@+id/attack_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/defend_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/attack_label"
+        android:textColor="@android:color/black"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+
+    <EditText
+        android:id="@+id/number_of_attack_dice_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/defend_label"
+        android:layout_centerHorizontal="true"
+        android:inputType="number"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/you_rolled_label"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/number_of_attack_dice_field"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/they_rolled_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/you_rolled_label"
+        android:textColor="@android:color/black"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+
+    <TextView
+        android:id="@+id/outcome_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/they_rolled_label"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/invasion_armies_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_below="@+id/outcome_label"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/number_of_invading_armies_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/invasion_armies_label"
+        android:layout_centerHorizontal="true"
+        android:inputType="number"
+        android:textAppearance="?android:textAppearanceMedium" />
+
+
+    <Button
+        android:id="@+id/attack_popup_OK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_attack_popup_attack"
+        android:text="Attack" />
+
+    <Button
+        android:id="@+id/attack_popup_CANCEL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="32dp"
+        android:onClick="on_attack_popup_finish"
+        android:text="Retreat" />
+
+
+</RelativeLayout>
