@@ -81,12 +81,14 @@
                     android:id="@+id/create_game_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="on_create_game"
                     android:text="Create Game" />
 
                 <Button
                     android:id="@+id/open_game_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="on_open_game"
                     android:text="Open Game" />
 
             </LinearLayout>

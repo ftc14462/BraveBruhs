@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -88,12 +89,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         enter_game_button.setEnabled(false);
 
         open_game_button = findViewById(R.id.open_game_button);
-        open_game_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        open_game_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
         open_game_button.setEnabled(false);
 
         initializeFields();
@@ -150,4 +151,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    public void on_create_game(View view) {
+        Toast.makeText(getApplicationContext(), "Doesn't work", Toast.LENGTH_SHORT).show();
+    }
+
+    public void on_open_game(View view) {
+        Toast.makeText(getApplicationContext(), "Doesn't work", Toast.LENGTH_SHORT).show();
+    }
 }

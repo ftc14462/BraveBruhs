@@ -67,6 +67,9 @@
         <activity
             android:name=".ComputerTurn"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".BattleLogPopup"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

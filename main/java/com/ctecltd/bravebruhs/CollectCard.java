@@ -42,6 +42,7 @@ public class CollectCard extends Activity {
         Player player = gameEngine.getCurrentPlayer();
         if (card != null) {
             player.takeCard(card);
+            gameEngine.getGame().currentGameTurn.receivedCard(card);
         }
         Intent BackIntent = new Intent();
         setResult(RESULT_OK, BackIntent);

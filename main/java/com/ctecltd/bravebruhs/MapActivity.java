@@ -93,8 +93,6 @@ public class MapActivity extends Activity implements View.OnClickListener {
             public void onClick(View view) {
                 Intent statusIntent = new Intent(getApplicationContext(), StatusPopup.class);
                 startActivityForResult(statusIntent, StatusPopupRequestCode);
-
-
             }
         });
         doAlsoOnCreate();

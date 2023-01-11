@@ -58,6 +58,7 @@ public class Attack extends MapActivity {
             if (gameEngine.isEligibleToAttack(country)) { //must be adjacent to attacking country
                 //defending country selected, commence attack.
                 gameEngine.setSecondaryCountry(country);
+                gameEngine.getGame().currentGameTurn.addAttack(country);
                 Intent attackPopupIntent = new Intent(getApplicationContext(), AttackPopup.class);
                 startActivityForResult(attackPopupIntent, AttackPopupRequestCode);
                 clickCount = 0;

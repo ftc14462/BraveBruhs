@@ -24,6 +24,7 @@ public class GameTurnController extends Activity {
     protected static final int TroopMovementPopupRequestCode = 10;
     protected static final int GameOverRequestCode = 11;
     protected static final int NotMyTurnRequestCode = 12;
+    protected static final int BattleLogPopupRequestCode = 13;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,13 +48,13 @@ public class GameTurnController extends Activity {
             return;
         }
 
-        if(!gameEngine.isMyTurn()){
-            if(gameEngine.isComputerTurn()){
-                intent= new Intent(getApplicationContext(), ComputerTurn.class);
+        if (!gameEngine.isMyTurn()) {
+            if (gameEngine.isComputerTurn()) {
+                intent = new Intent(getApplicationContext(), ComputerTurn.class);
                 startActivityForResult(intent, NotMyTurnRequestCode);
                 return;
             }
-            intent= new Intent(getApplicationContext(), NotMyTurn.class);
+            intent = new Intent(getApplicationContext(), NotMyTurn.class);
             startActivityForResult(intent, NotMyTurnRequestCode);
             return;
         }

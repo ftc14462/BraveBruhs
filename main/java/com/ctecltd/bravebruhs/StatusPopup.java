@@ -1,12 +1,16 @@
 package com.ctecltd.bravebruhs;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import static com.ctecltd.bravebruhs.GameTurnController.BattleLogPopupRequestCode;
+import static com.ctecltd.bravebruhs.GameTurnController.StatusPopupRequestCode;
 
 /**
  * Created by scoot on 12/23/2022.
@@ -75,8 +79,11 @@ public class StatusPopup extends Activity {
     }
 
     public void on_status_popup_ok(View view) {
-
         finish();
     }
 
+    public void on_battle_log(View view) {
+        Intent statusIntent = new Intent(getApplicationContext(), BattleLogPopup.class);
+        startActivityForResult(statusIntent, BattleLogPopupRequestCode);
+    }
 }

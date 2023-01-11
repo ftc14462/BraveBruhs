@@ -268,7 +268,6 @@ public class AttackPopup extends Activity {
                 defendingContinent.setPlayer(null);
             }
             gameEngine.attackerWonABattle();
-
         }
         finish();
     }

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -286,21 +287,27 @@ public class GameEngine {
 //    }
 
     public void playerTurnStageFinished(PlayerTurnStage playerTurnStage) {
-        //if current player just collected a card, go to next player and set back to turn in cards
+        //if player is turning in cards, then they just started turn, and should be awarded some armies
         if (playerTurnStage == PlayerTurnStage.TURN_IN_CARDS) {
             if (!bypassAwardArmies) {
                 awardPlayerArmies();
+                game.currentGameTurn = new GameTurn(game);
             }
         }
+        //if, by attacking and winning, someone just won the game, finish their turn by going to collect_card
         if (playerTurnStage == PlayerTurnStage.ATTACK && game.gameOver) {
             currentPlayerTurnStage = PlayerTurnStage.COLLECT_CARD;
             return;
         }
 
+        //if current player just collected a card, their turn is over, so go to next player and set back to turn in cards
         if (playerTurnStage == PlayerTurnStage.COLLECT_CARD) {
+            game.logCurrentGameTurn();
             Player player = getCurrentPlayer();
 //            int id = player.getID();
             int id = getCurrentPlayerIndex();
+
+            //find next player who isn't dead
             do {
                 id++;
                 if (id < game.players.length) {
@@ -313,6 +320,8 @@ public class GameEngine {
             this.currentPlayerTurnStage = PlayerTurnStage.TURN_IN_CARDS;
             return;
         }
+
+        //special cases taken care of. just go to next turn stage
         int index = playerTurnStage.ordinal();
         this.currentPlayerTurnStage = PlayerTurnStage.values()[index + 1];
     }
@@ -597,25 +606,50 @@ public class GameEngine {
         Player player = getCurrentPlayer();
         if (!player.isComputerPlayer()) {
             System.out.println("huh?");
+            return;
         }
         awardPlayerArmies();
+        game.turnNumber++;
+        game.currentGameTurn = new GameTurn(game);
         Country[] countries = game.gameMap.getCountries(player);
         if (countries.length < 1) {
             System.out.println("bad juju");
+            return;
         }
+        setPlayerWonABattle(false);
+
+        if (player.getCards().size() > 4) {
+            int turnInBonus = getCurrentCardTurnInBonus();
+            Card[] turn_in_cards = player.getCards().subList(0, 3).toArray(new Card[0]);
+            awardPlayerOwnsCardBonus(turn_in_cards);
+            player.removeCardsFromHand(turn_in_cards);
+            player.addReserveArmies(turnInBonus);
+            cardsTurnedIn();
+            game.currentGameTurn.turnedInCards(turn_in_cards);
+        }
+
         Random r = new Random();
         int c = r.nextInt(countries.length);
         Country country = countries[c];
+        activeCountry = country;
         placeArmiesOnCountry(player.getReserveArmies(), country);
         String[] adjacents = country.getAdjacentTo();
         for (int i = 0; i < adjacents.length; i++) {
             String adjacent = adjacents[i];
             Country adjacentCountry = game.gameMap.getCountry(adjacent);
             if (!player.getName().equals(adjacentCountry.getPlayer().getName())) {
+                game.currentGameTurn.addAttack(adjacentCountry);
                 evenOddsAttack(country, adjacentCountry);
             }
-            if (country.getArmies() < 2) {
+            if (country.getArmies() < 3) {
                 break;
+            }
+        }
+        if (attackerWonABattle) {
+            Card card = GameEngine.getNextCard();
+            if (card != null) {
+                player.takeCard(card);
+                game.currentGameTurn.receivedCard(card);
             }
         }
         playerTurnStageFinished(PlayerTurnStage.COLLECT_CARD);
@@ -625,6 +659,7 @@ public class GameEngine {
         int attackingArmies = attackingCountry.getArmies() - 1;
         int defendingArmies = defendingCountry.getArmies();
         if (attackingArmies >= defendingArmies) {
+            setAttackerWonABattle(true);
             int attackingWith = 3;
             if (attackingWith > attackingArmies) {
                 attackingWith = attackingArmies;
@@ -652,5 +687,13 @@ public class GameEngine {
     public Continent getContinent(Country country) {
 //        return game.gameMap.getContinent(defendingCountry.getContinent().getName());
         return game.gameMap.getContinent(country);
+    }
+
+    public GameTurn getCurrentGameTurn() {
+        return game.currentGameTurn;
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

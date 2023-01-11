@@ -2,34 +2,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ctecltd.bravebruhs.StatusPopup">
+    tools:context="com.ctecltd.bravebruhs.BattleLogPopup">
 
     <LinearLayout
-        android:id="@+id/status_popup_layout"
+        android:id="@+id/battle_log_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge">
+
+        <ListView
+            android:id="@+id/battle_log_list_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <Button
-        android:id="@+id/status_popup_OK"
+        android:id="@+id/battle_log_OK"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="32dp"
-        android:onClick="on_status_popup_ok"
+        android:onClick="on_battle_log_popup_ok"
         android:text="ok" />
 
-    <Button
-        android:id="@+id/battle_log_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="32dp"
-        android:onClick="on_battle_log"
-        android:text="Battle Log" />
 </RelativeLayout>

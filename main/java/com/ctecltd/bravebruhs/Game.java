@@ -23,6 +23,9 @@ class Game {
     public boolean fixedCardBonus = false;
     public int currentCardTurnInBonus = STARTING_BONUS;
     public ArrayList<Integer> usedCardIds;
+    public int turnNumber;
+    public ArrayList<GameTurn> gameTurnRecord;
+    public GameTurn currentGameTurn;
 
     public Game(Player[] players, GameMap gameMap) {
 //        this.friends = friends;
@@ -35,6 +38,7 @@ class Game {
         this.currentPlayer = players[0];
         this.usedCardIds = new ArrayList<Integer>();
 //        gameEngine.assignCountriesToPlayers();
+        this.gameTurnRecord=new ArrayList<GameTurn>();
 
     }
 
@@ -73,5 +77,13 @@ class Game {
 
     public GameMap getGameMap() {
         return gameMap;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void logCurrentGameTurn() {
+        gameTurnRecord.add(currentGameTurn);
     }
 }
