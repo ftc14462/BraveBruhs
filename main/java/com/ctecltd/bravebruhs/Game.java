@@ -1,5 +1,13 @@
 package com.ctecltd.bravebruhs;
 
+import android.content.Context;
+import android.util.Log;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,7 +18,9 @@ import static com.ctecltd.bravebruhs.GameEngine.STARTING_BONUS;
  * Created by scoot on 1/6/2023.
  */
 
-class Game {
+class Game implements Serializable {
+    static final long serialVersionUID = 42L;
+    private static final String BACKUP = "_backup.bk";
     //    private final GameEngine gameEngine;
     String ID;
     //    Friend[] friends;
@@ -30,7 +40,7 @@ class Game {
     public Game(Player[] players, GameMap gameMap) {
 //        this.friends = friends;
         this.players = players;
-        this.ID = makeID();
+        makeID();
         this.gameMap = gameMap;
 //        this.gameEngine = GameEngine.getGameEngineInstance();
         repliedYes = new boolean[players.length];
@@ -38,7 +48,7 @@ class Game {
         this.currentPlayer = players[0];
         this.usedCardIds = new ArrayList<Integer>();
 //        gameEngine.assignCountriesToPlayers();
-        this.gameTurnRecord=new ArrayList<GameTurn>();
+        this.gameTurnRecord = new ArrayList<GameTurn>();
 
     }
 
@@ -60,14 +70,17 @@ class Game {
         return players;
     }
 
-    private String makeID() {
+    public void makeID() {
         LocalDateTime time = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd.HHmmss.SSS");
         String initials = "";
         for (Player player : players) {
+            if (player == null) {
+                continue;
+            }
             initials += player.getName().charAt(0);
         }
-        return formatter.format(time) + "_" + initials;
+        ID = formatter.format(time) + "_" + initials;
     }
 
     @Override
@@ -85,5 +98,194 @@ class Game {
 
     public void logCurrentGameTurn() {
         gameTurnRecord.add(currentGameTurn);
+        backupGame();
+    }
+
+    private void backupGame() {
+        Context context = GameEngine.context;
+        try {
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(this.ID+BACKUP+".txt", Context.MODE_PRIVATE));
+//            FileOutputStream fos = new FileOutputStream(context.openFileOutput(this.ID+BACKUP+".txt", Context.MODE_PRIVATE));
+            ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(getBackupFilename(), Context.MODE_PRIVATE));
+
+            oos.writeObject(this);
+//            for (GameTurn gameTurn : gameTurnRecord) {
+//                oos.writeObject(gameTurn);
+//            }
+
+            oos.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    public String getBackupFilename() {
+        return this.ID + BACKUP;
+    }
+
+    public boolean tryRestoreBackup() {
+        if (gameTurnRecord == null) {
+            gameTurnRecord = new ArrayList<GameTurn>();
+        }
+        gameTurnRecord.clear();
+        try {
+            ObjectInputStream ois = new ObjectInputStream(GameEngine.context.openFileInput(getBackupFilename()));
+            gameMap = (GameMap) ois.readObject();
+            while (true) {
+                GameTurn gameTurn = (GameTurn) ois.readObject();
+                if (gameTurn == null) {
+                    break;
+                }
+                gameTurnRecord.add(gameTurn);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
+    }
+
+    public void setGameMap(GameMap gameMap) {
+        this.gameMap = gameMap;
+    }
+
+    public boolean[] getRepliedYes() {
+        return repliedYes;
+    }
+
+    public void setRepliedYes(boolean[] repliedYes) {
+        this.repliedYes = repliedYes;
+    }
+
+    public int getStartingArmies() {
+        return startingArmies;
+    }
+
+    public void setStartingArmies(int startingArmies) {
+        this.startingArmies = startingArmies;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(Player[] players) {
+        if (players == null) return;
+        this.players = players;
+    }
+
+    public boolean isFixedCardBonus() {
+        return fixedCardBonus;
+    }
+
+    public void setFixedCardBonus(boolean fixedCardBonus) {
+        this.fixedCardBonus = fixedCardBonus;
+    }
+
+    public int getCurrentCardTurnInBonus() {
+        return currentCardTurnInBonus;
+    }
+
+    public void setCurrentCardTurnInBonus(int currentCardTurnInBonus) {
+        this.currentCardTurnInBonus = currentCardTurnInBonus;
+    }
+
+    public ArrayList<Integer> getUsedCardIds() {
+        return usedCardIds;
+    }
+
+    public void setUsedCardIds(ArrayList<Integer> usedCardIds) {
+        this.usedCardIds = usedCardIds;
+    }
+
+    public int getTurnNumber() {
+        return turnNumber;
+    }
+
+    public void setTurnNumber(int turnNumber) {
+        this.turnNumber = turnNumber;
+    }
+
+    public ArrayList<GameTurn> getGameTurnRecord() {
+        return gameTurnRecord;
+    }
+
+    public void setGameTurnRecord(ArrayList<GameTurn> gameTurnRecord) {
+        this.gameTurnRecord = gameTurnRecord;
+    }
+
+    public GameTurn getCurrentGameTurn() {
+        return currentGameTurn;
+    }
+
+    public void setCurrentGameTurn(GameTurn currentGameTurn) {
+        this.currentGameTurn = currentGameTurn;
+    }
+
+    public static Game tryRestoreBackup(String backupFilename) {
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(GameEngine.context.openFileInput(backupFilename));
+            Object object = ois.readObject();
+            if (object instanceof Game) {
+                Game game = (Game) object;
+                String id = game.ID;
+                if (id == null) {
+                    return null;
+                }
+                if (game.currentPlayer == null) {
+                    game.currentPlayer = game.players[0];
+                }
+                if (game.gameTurnRecord == null) {
+                    game.gameTurnRecord = new ArrayList<GameTurn>();
+                }
+                if (game.usedCardIds == null) {
+                    game.usedCardIds = new ArrayList<Integer>();
+                }
+                if (game.currentGameTurn == null) {
+                    game.currentGameTurn = new GameTurn(game);
+                }
+                return (Game) object;
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void save() {
+        this.backupGame();
+    }
+
+    public static boolean isGameBackup(File file) {
+        String fileName = file.getName();
+        if (fileName.contains(BACKUP)) {
+            return true;
+        }
+        return false;
     }
 }

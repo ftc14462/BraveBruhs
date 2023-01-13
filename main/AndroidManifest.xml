@@ -70,6 +70,9 @@
         <activity
             android:name=".BattleLogPopup"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".CreateGamePopup"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

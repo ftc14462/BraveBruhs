@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private GameEngine gameEngine;
     private static final int EnterGameRequestCode = 1;
     protected final static int ContinueGameRequestCode = 2;
+    private final static int CreateGameRequestCode = 3;
 
 
     @Override
@@ -81,14 +82,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if (selectedActiveGame == null) {
                     return;
                 }
-                gameEngine.setGame(selectedActiveGame);
+//                selectedActiveGame.tryRestoreBackup();
+                Game restoredGame = Game.tryRestoreBackup(selectedActiveGame.getBackupFilename());
+                if (restoredGame != null) {
+                    gameEngine.setGame(restoredGame);
+                } else {
+                    gameEngine.setGame(selectedActiveGame);
+                }
                 intent = new Intent(MainActivity.this, EnterGame.class);
                 startActivityForResult(intent, EnterGameRequestCode);
             }
         });
         enter_game_button.setEnabled(false);
 
-        open_game_button = findViewById(R.id.open_game_button);
+        open_game_button =
+
+                findViewById(R.id.open_game_button);
 //        open_game_button.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -101,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void initializeFields() {
+        updateGameList();
         Friend matt = new Friend("Matthew", "7203919024");
 //        MyPlayer myPlayer = new MyPlayer("weirdo", "7208786164");
         Friend[] friends = new Friend[]{matt};
@@ -110,21 +120,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         GameEngine.getFixedCardBonus();
 
         Game game = new Game(friends, new MyPlayer("weirdo", "7208786164"), new GameMap());
+        game = new Game(new Player[]{new MyPlayer("bob", "7208786164"), new ComputerPlayer("xr", 1)}, new GameMap());
         gameEngine.setGame(game);
-        gameEngine.assignCountriesToPlayersRandomly();
+        gameEngine.assignCountriesToPlayersRandomly(game);
         gameEngine.updateConqueredContinents();
-        activeGamesArrayAdapter.add(game);
+//        activeGamesArrayAdapter.add(game);
 
         game = new Game(plrs, new GameMap());
         gameEngine.setGame(game);
-        gameEngine.assignCountriesToPlayersRandomly();
+        gameEngine.assignCountriesToPlayersRandomly(game);
         gameEngine.updateConqueredContinents();
-        activeGamesArrayAdapter.add(game);
-        activeGamesArrayAdapter.notifyDataSetChanged();
+//        activeGamesArrayAdapter.add(game);
+//        activeGamesArrayAdapter.notifyDataSetChanged();
 
-        pendingGamesArrayAdapter.add(new Game(friends, new MyPlayer("weirdo", "7208786164"), new GameMap()));
-        pendingGamesArrayAdapter.add(new Game(friends, new MyPlayer("weirdo", "7208786164"), new GameMap()));
-        pendingGamesArrayAdapter.notifyDataSetChanged();
+//        pendingGamesArrayAdapter.add(new Game(friends, new MyPlayer("weirdo", "7208786164"), new GameMap()));
+//        pendingGamesArrayAdapter.add(new Game(friends, new MyPlayer("weirdo", "7208786164"), new GameMap()));
+//        pendingGamesArrayAdapter.notifyDataSetChanged();
 
 //        friendsArrayAdapter.add(matt);
 //        friendsArrayAdapter.notifyDataSetChanged();
@@ -149,10 +160,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             friendsArrayAdapter.add(new Friend(name, number));
             return;
         }
+        if (resultCode == RESULT_OK && requestCode == CreateGameRequestCode) {
+            updateGameList();
+            return;
+        }
+    }
+
+    private void updateGameList() {
+        Game[] games = gameEngine.getGameList();
+        if (games == null) {
+            return;
+        }
+        activeGamesArrayAdapter.clear();
+        for (Game game : games) {
+            activeGamesArrayAdapter.add(game);
+        }
     }
 
     public void on_create_game(View view) {
-        Toast.makeText(getApplicationContext(), "Doesn't work", Toast.LENGTH_SHORT).show();
+        intent = new Intent(MainActivity.this, CreateGamePopup.class);
+        startActivityForResult(intent, CreateGameRequestCode);
     }
 
     public void on_open_game(View view) {

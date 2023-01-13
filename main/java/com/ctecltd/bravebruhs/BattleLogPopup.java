@@ -52,11 +52,11 @@ public class BattleLogPopup extends Activity {
         }
 
         for (GameTurn gameTurn : gameEngine.getGame().gameTurnRecord) {
-            TextView tv = new TextView(getApplicationContext());
-            tv.setText(gameTurn.toString());
-            tv.setTextColor(Color.parseColor(gameTurn.currentPlayer.getColor()));
-            tv.setTypeface(Typeface.MONOSPACE);
-            tv.setTextSize(FONTSIZE);
+//            TextView tv = new TextView(getApplicationContext());
+//            tv.setText(gameTurn.toString());
+//            tv.setTextColor(Color.parseColor(gameTurn.currentPlayer.getColor()));
+//            tv.setTypeface(Typeface.MONOSPACE);
+//            tv.setTextSize(FONTSIZE);
 //            arrayAdapter.add(tv);
             arrayAdapter.add(gameTurn);
 //            battle_log_layout.addView(tv);

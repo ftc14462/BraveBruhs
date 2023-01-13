@@ -1,10 +1,15 @@
 package com.ctecltd.bravebruhs;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -17,16 +22,9 @@ public class GameEngine {
     private static final int MAX_BONUS = 30;
     private static final int OWN_COUNTRY_BONUS = 2;
     private static final int STARTING_FIXED_BONUS = 8;
-    //    private boolean gameOver = false;
-//    private Player currentPlayer;
-//    private Player[] players;
     private PlayerTurnStage currentPlayerTurnStage = PlayerTurnStage.TURN_IN_CARDS;
     private boolean playerWonABattle = false;
-    //    private int startingArmies = -1;
-//    private boolean fixedCardBonus = false;
     private static GameEngine gameEngineInstance = null;
-    //    private int currentCardTurnInBonus;
-//    private GameMap gameMap;
     private static Card[] cardDeck;
     //    private static ArrayList<Integer> usedCardIds;
     public static Context context;
@@ -51,9 +49,6 @@ public class GameEngine {
         getGameEngineInstance();
 //        String[] mapList = new String[GameMap.values().length];
         String[] mapList = {"Classic"};
-//        for (int i = 0; i < mapList.length; i++) {
-//            mapList[i] = GameMap.values()[i].toString();
-//        }
         return mapList;
     }
 
@@ -68,10 +63,6 @@ public class GameEngine {
     public GameMap getGameMap() {
         return game.gameMap;
     }
-
-//    public void setGameMap(GameMap gameMap) {
-//        this.game.gameMap = gameMap;
-//    }
 
     public boolean isGameOver() {
         return game.gameOver;
@@ -88,10 +79,6 @@ public class GameEngine {
     public Player[] getPlayers() {
         return game.players;
     }
-
-//    public void setPlayers(Player[] players) {
-//        this.game.players = players;
-//    }
 
     public PlayerTurnStage getCurrentPlayerTurnStage() {
         return currentPlayerTurnStage;
@@ -150,8 +137,12 @@ public class GameEngine {
     }
 
     public void assignCountriesToPlayersRandomly() {
-        Country[] countries = this.getGameMap().getCountries();
-        int armiesPerCountry = (int) (this.game.players.length * this.game.startingArmies / countries.length);
+        assignCountriesToPlayersRandomly(this.game);
+    }
+
+    public void assignCountriesToPlayersRandomly(Game assignGame) {
+        Country[] countries = assignGame.getGameMap().getCountries();
+        int armiesPerCountry = (int) (assignGame.players.length * assignGame.startingArmies / countries.length);
         if (armiesPerCountry < 1) {
             armiesPerCountry = 1;
         }
@@ -165,9 +156,9 @@ public class GameEngine {
             int countryID = random.nextInt(numUnassignedCountries);
 //            Country country = countries[countryID];
             Country country = countryArrayList.get(countryID);
-            country.setPlayer(this.game.players[playerID]);
+            country.setPlayer(assignGame.players[playerID]);
             playerID++;
-            if (playerID >= this.game.players.length) {
+            if (playerID >= assignGame.players.length) {
                 playerID = 0;
             }
             country.setArmies(armiesPerCountry);
@@ -177,10 +168,10 @@ public class GameEngine {
             countryArrayList.remove(countryID);
         }
 
-        int remainingArmies = game.startingArmies - (int) (armiesPerCountry * countries.length / game.players.length);
+        int remainingArmies = assignGame.startingArmies - (int) (armiesPerCountry * countries.length / assignGame.players.length);
         int armiesPlaced = 0;
         while (armiesPlaced < remainingArmies) {
-            Player thisPlayer = game.players[playerID];
+            Player thisPlayer = assignGame.players[playerID];
             int countryID = random.nextInt(countries.length - 1);
             Country country = countries[countryID];
             Player countryPlayer = country.getPlayer();
@@ -189,7 +180,7 @@ public class GameEngine {
                 armiesPlaced++;
             }
             playerID++;
-            if (playerID >= this.game.players.length) {
+            if (playerID >= assignGame.players.length) {
                 playerID = 0;
             }
         }
@@ -302,7 +293,6 @@ public class GameEngine {
 
         //if current player just collected a card, their turn is over, so go to next player and set back to turn in cards
         if (playerTurnStage == PlayerTurnStage.COLLECT_CARD) {
-            game.logCurrentGameTurn();
             Player player = getCurrentPlayer();
 //            int id = player.getID();
             int id = getCurrentPlayerIndex();
@@ -318,6 +308,7 @@ public class GameEngine {
             } while (getCurrentPlayer().isDead());
 //            awardPlayerArmies();
             this.currentPlayerTurnStage = PlayerTurnStage.TURN_IN_CARDS;
+            game.logCurrentGameTurn();
             return;
         }
 
@@ -695,5 +686,31 @@ public class GameEngine {
 
     public Game getGame() {
         return game;
+    }
+
+    public void setPlayers(Player[] players) {
+        game.setPlayers(players);
+    }
+
+    public Game[] getGameList() {
+        File dir = context.getFilesDir();
+        File[] files = dir.listFiles();
+        if (files.length < 1) {
+            return null;
+        }
+        ArrayList arrayList = new ArrayList();
+        for (File file : files) {
+            if (Game.isGameBackup(file)) {
+                Game game = Game.tryRestoreBackup(file.getName());
+                if (game == null) {
+                    continue;
+                }
+                arrayList.add(game);
+            }
+        }
+        if (arrayList.size()<1){
+            return null;
+        }
+        return (Game[]) arrayList.toArray(new Game[0]);
     }
 }

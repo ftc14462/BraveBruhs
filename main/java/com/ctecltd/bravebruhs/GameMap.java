@@ -9,18 +9,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by scoot on 12/19/2022.
  */
 
-class GameMap {
+class GameMap implements Serializable {
+    static final long serialVersionUID = 42L;
 
-    private String[] countryNameList = {"US", "CA", "MX", "AG", "CH", "UK", "GL", "IR", "IN", "UG", "SA", "SP", "FR", "DL"};
-    private String[] continentList = {"NA", "NA", "NA", "SA", "AS", "EU", "NA", "EU", "AS", "AF", "AF", "EU", "EU", "EU"};
-    private String[] continentShortList = {"NA", "SA", "AS", "EU", "AF"};
-    private int[] bonusList = {5, 2, 7, 7, 5, 3};
+    //    private String[] countryNameList = {"US", "CA", "MX", "AG", "CH", "UK", "GL", "IR", "IN", "UG", "SA", "SP", "FR", "DL"};
+//    private String[] continentList = {"NA", "NA", "NA", "SA", "AS", "EU", "NA", "EU", "AS", "AF", "AF", "EU", "EU", "EU"};
+//    private String[] continentShortList = {"NA", "SA", "AS", "EU", "AF"};
+//    private int[] bonusList = {5, 2, 7, 7, 5, 3};
     private Country[] countries;
     private Continent[] continents;
 
@@ -172,5 +174,13 @@ class GameMap {
             }
         }
         return null;
+    }
+
+    public void setCountries(Country[] countries) {
+        this.countries = countries;
+    }
+
+    public void setContinents(Continent[] continents) {
+        this.continents = continents;
     }
 }

@@ -1,10 +1,13 @@
 package com.ctecltd.bravebruhs;
 
+import java.io.Serializable;
+
 /**
  * Created by scoot on 12/18/2022.
  */
 
-class Continent {
+class Continent implements Serializable {
+    static final long serialVersionUID = 42L;
     private final int y;
     private final int x;
     private int ID;
@@ -83,8 +86,9 @@ class Continent {
         return y;
     }
 
+
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 }

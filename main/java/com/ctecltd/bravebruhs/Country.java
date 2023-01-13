@@ -1,12 +1,14 @@
 package com.ctecltd.bravebruhs;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by scoot on 12/18/2022.
  */
 
-class Country {
+class Country implements Serializable {
+    static final long serialVersionUID = 42L;
     private final int x;
     private final int y;
     private final String[] adjacentTo;
@@ -115,5 +117,17 @@ class Country {
 
     public int getID() {
         return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setContinent(Continent continent) {
+        this.continent = continent;
     }
 }

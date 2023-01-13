@@ -1,5 +1,6 @@
 package com.ctecltd.bravebruhs;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,9 +8,27 @@ import java.util.ArrayList;
  */
 
 
-class Player {
+class Player implements Serializable{
+    static final long serialVersionUID = 42L;
 
     protected String color;
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public static String[] getCOLORS() {
+        return COLORS;
+    }
+
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     private String name;
     private int ID;
     //    private ArrayList<Country> countries;
@@ -30,6 +49,9 @@ class Player {
         this.reserveArmies = 0;
         this.color = COLORS[ID];
     }
+
+    //for serialization
+    public Player(){}
 
     public Player(Friend friend, int id) {
         this(friend.getName(), id, friend.getPhoneNumber());
