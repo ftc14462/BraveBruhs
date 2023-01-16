@@ -520,6 +520,7 @@ public class GameEngine {
             game.currentPlayer.takeCard(card);
         }
         player.getCards().clear();
+        game.currentGameTurn.addConqueredPlayer(player);
     }
 
     public void setCurrentPlayerTurnStage(PlayerTurnStage currentPlayerTurnStage) {
@@ -541,6 +542,7 @@ public class GameEngine {
         }
         if (totalDead == totalPlayers - 1) {
             game.gameOver = true;
+            game.currentGameTurn.playerWon = true;
             return true;
         }
         game.gameOver = false;
@@ -600,8 +602,6 @@ public class GameEngine {
             return;
         }
         awardPlayerArmies();
-        game.turnNumber++;
-        game.currentGameTurn = new GameTurn(game);
         Country[] countries = game.gameMap.getCountries(player);
         if (countries.length < 1) {
             System.out.println("bad juju");
@@ -618,6 +618,9 @@ public class GameEngine {
             cardsTurnedIn();
             game.currentGameTurn.turnedInCards(turn_in_cards);
         }
+        game.turnNumber++;
+        game.currentGameTurn = new GameTurn(game);
+
 
         Random r = new Random();
         int c = r.nextInt(countries.length);
@@ -647,6 +650,7 @@ public class GameEngine {
     }
 
     private void evenOddsAttack(Country attackingCountry, Country defendingCountry) {
+        Player defendingPlayer = defendingCountry.getPlayer();
         int attackingArmies = attackingCountry.getArmies() - 1;
         int defendingArmies = defendingCountry.getArmies();
         if (attackingArmies >= defendingArmies) {
@@ -669,6 +673,9 @@ public class GameEngine {
             } else {
                 defendingContinent.setPlayer(null);
             }
+            checkAndDoIfPlayerConquered(defendingPlayer);
+            checkAndDoIfPlayerWinner();
+            //TODO tell user that he lost
         } else {
             defendingCountry.setArmies(defendingArmies - attackingArmies);
             attackingCountry.setArmies(1);
@@ -708,7 +715,7 @@ public class GameEngine {
                 arrayList.add(game);
             }
         }
-        if (arrayList.size()<1){
+        if (arrayList.size() < 1) {
             return null;
         }
         return (Game[]) arrayList.toArray(new Game[0]);

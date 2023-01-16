@@ -219,6 +219,7 @@ public class AttackPopup extends Activity {
         if (isConquered) {
             boolean attackerChampion = gameEngine.checkAndDoIfPlayerWinner();
             if (attackerChampion) {
+                gameEngine.getGame().logCurrentGameTurn();
                 Intent intent = new Intent(getApplicationContext(), GameOver.class);
                 startActivityForResult(intent, GameOverRequestCode);
                 gameEngine.setBypassAwardArmies(false);

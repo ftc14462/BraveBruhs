@@ -1,6 +1,7 @@
 package com.ctecltd.bravebruhs;
 
 import java.io.Serializable;
+import java.util.AbstractList;
 import java.util.ArrayList;
 
 
@@ -18,6 +19,8 @@ class GameTurn implements Serializable {
 
     public ArrayList<Country> attackedCountries;
     public Card receivedCard;
+    public boolean playerWon;
+    private ArrayList<Player> conqueredPlayers;
 
     public GameTurn(Game game) {
         this.gameID = game.getID();
@@ -25,6 +28,7 @@ class GameTurn implements Serializable {
         this.currentPlayer = game.currentPlayer;
         this.attackedCountries = new ArrayList<Country>();
         this.armiesPlaced = currentPlayer.getReserveArmies();
+        this.conqueredPlayers = new ArrayList<Player>();
     }
 
     public GameTurn() {
@@ -73,6 +77,14 @@ class GameTurn implements Serializable {
             text += "not ";
         }
         text += "receive a card.";
+        if (conqueredPlayers != null && conqueredPlayers.size() > 0) {
+            for (Player player : conqueredPlayers) {
+                text += "\nConquered: " + player + "!";
+            }
+        }
+        if (playerWon) {
+            text += currentPlayer + " won!";
+        }
         return text;
     }
 
@@ -129,4 +141,7 @@ class GameTurn implements Serializable {
     }
 
 
+    public void addConqueredPlayer(Player player) {
+        conqueredPlayers.add(player);
+    }
 }
