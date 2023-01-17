@@ -266,4 +266,9 @@ public class CreateGamePopup extends Activity {
         }
         return false;
     }
+
+    public void on_cancel_click(View view) {
+        setResult(RESULT_CANCELED);
+        finish();
+    }
 }

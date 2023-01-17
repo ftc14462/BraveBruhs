@@ -667,6 +667,9 @@ public class GameEngine {
             if (invasionArmies > attackerRemainingArmies) {
                 invasionArmies = attackerRemainingArmies;
             }
+            if (invasionArmies < 1) {
+                invasionArmies = 1;
+            }
             defendingCountry.setArmies(invasionArmies);
             attackingCountry.setArmies(attackerRemainingArmies + 1 - invasionArmies);
             Continent defendingContinent = getContinent(defendingCountry);

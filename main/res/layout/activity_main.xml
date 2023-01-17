@@ -60,7 +60,6 @@
                 android:text="Pending Games"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-
             <ListView
                 android:id="@+id/pending_games_list"
                 android:layout_width="wrap_content"
@@ -90,12 +89,8 @@
                     android:layout_height="wrap_content"
                     android:onClick="on_open_game"
                     android:text="Open Game" />
-
             </LinearLayout>
-
-
         </LinearLayout>
-
 
         <!--<Space-->
         <!--android:layout_width="20dp"-->
@@ -115,7 +110,6 @@
                 android:text="Active Games"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-
             <ListView
                 android:id="@+id/active_games_list"
                 android:layout_width="wrap_content"
@@ -125,7 +119,6 @@
                 android:divider="@color/dkblue"
                 android:dividerHeight="2dp" />
 
-
             <Button
                 android:id="@+id/enter_game_button"
                 android:layout_width="match_parent"
@@ -133,6 +126,34 @@
                 android:text="Enter Game" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/finished_games_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Finished Games"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <ListView
+                android:id="@+id/finished_games_list"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:choiceMode="singleChoice"
+                android:clickable="true"
+                android:divider="@color/dkblue"
+                android:dividerHeight="2dp" />
+
+            <Button
+                android:id="@+id/open_finished_game_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Open Game" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

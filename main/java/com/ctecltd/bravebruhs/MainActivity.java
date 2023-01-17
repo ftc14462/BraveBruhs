@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ListView friends_list;
     private ArrayList<Game> activeGamesList = new ArrayList<Game>();
     private ArrayAdapter<Game> activeGamesArrayAdapter;
+    private ArrayAdapter<Game> finishedGamesArrayAdapter;
+    private ArrayList<Game> finishedGamesList = new ArrayList<Game>();
     private ArrayList<Game> pendingGamesList = new ArrayList<Game>();
     private ArrayAdapter<Game> pendingGamesArrayAdapter;
     private ArrayList<Friend> friendsList = new ArrayList<Friend>();
@@ -37,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int EnterGameRequestCode = 1;
     protected final static int ContinueGameRequestCode = 2;
     private final static int CreateGameRequestCode = 3;
+    private ListView finished_games_list;
+    private Game selectedFinishedGame;
+    private Button open_finished_game_button;
 
 
     @Override
@@ -48,12 +53,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         gameEngine = GameEngine.getGameEngineInstance();
 
         active_games_list = findViewById(R.id.active_games_list);
+        finished_games_list = findViewById(R.id.finished_games_list);
         pending_games_list = findViewById(R.id.pending_games_list);
 //        friends_list = findViewById(R.id.friends_list);
 
         activeGamesArrayAdapter = new ArrayAdapter<Game>(this, android.R.layout.simple_list_item_single_choice, activeGamesList);
         active_games_list.setAdapter(activeGamesArrayAdapter);
         active_games_list.setOnItemClickListener(this);
+
+        finishedGamesArrayAdapter = new ArrayAdapter<Game>(this, android.R.layout.simple_list_item_single_choice, finishedGamesList);
+        finished_games_list.setAdapter(finishedGamesArrayAdapter);
+        finished_games_list.setOnItemClickListener(this);
 
         pendingGamesArrayAdapter = new ArrayAdapter<Game>(this, android.R.layout.simple_list_item_single_choice, pendingGamesList);
         pending_games_list.setAdapter(pendingGamesArrayAdapter);
@@ -94,6 +104,26 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
         enter_game_button.setEnabled(false);
+
+        open_finished_game_button = findViewById(R.id.open_finished_game_button);
+        open_finished_game_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedFinishedGame == null) {
+                    return;
+                }
+//                selectedActiveGame.tryRestoreBackup();
+                Game restoredGame = Game.tryRestoreBackup(selectedFinishedGame.getBackupFilename());
+                if (restoredGame != null) {
+                    gameEngine.setGame(restoredGame);
+                } else {
+                    gameEngine.setGame(selectedFinishedGame);
+                }
+                intent = new Intent(MainActivity.this, EnterGame.class);
+                startActivityForResult(intent, EnterGameRequestCode);
+            }
+        });
+        open_finished_game_button.setEnabled(false);
 
         open_game_button =
 
@@ -146,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (adapterView.equals(active_games_list)) {
             selectedActiveGame = activeGamesList.get(i);
             enter_game_button.setEnabled(true);
+        } else if (adapterView.equals(finished_games_list)) {
+            selectedFinishedGame = finishedGamesList.get(i);
+            open_finished_game_button.setEnabled(true);
         } else {
             selectedPendingGame = pendingGamesList.get(i);
             open_game_button.setEnabled(true);
@@ -164,6 +197,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             updateGameList();
             return;
         }
+        if (requestCode == RESULT_OK && requestCode == EnterGameRequestCode) {
+            if (gameEngine.getGame().isGameOver()) {
+                updateGameList();
+            }
+        }
     }
 
     private void updateGameList() {
@@ -173,7 +211,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
         activeGamesArrayAdapter.clear();
         for (Game game : games) {
-            activeGamesArrayAdapter.add(game);
+            if (game.isGameOver()) {
+                finishedGamesArrayAdapter.add(game);
+            } else {
+                activeGamesArrayAdapter.add(game);
+            }
         }
     }
 
