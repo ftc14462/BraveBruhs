@@ -53,7 +53,7 @@ class GameTurn implements Serializable {
     @Override
     public String toString() {
 //        String text = gameID + ": " + turnNumber + "  ";
-        String text = "";
+        String text = turnNumber + ") ";
         text += currentPlayer + " ";
         if (turn_in_cards == null) {
             text += "did not turn in cards";

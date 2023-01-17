@@ -1,7 +1,6 @@
 package com.ctecltd.bravebruhs;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -33,6 +32,7 @@ public class CreateGamePopup extends Activity {
     private Button addPlayerButton;
     private String[] playerNames;
     private GameEngine gameEngine;
+    private String MyName = "me";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +88,7 @@ public class CreateGamePopup extends Activity {
         addPlayerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String playerName = player_name_field.getText().toString().trim();
+                String playerName = remTrailingWhiteSpace(player_name_field.getText().toString());
                 addPlayer(playerName);
             }
         });
@@ -137,7 +137,7 @@ public class CreateGamePopup extends Activity {
 //                gameEngine.setPlayerNames(player_names_list_layout.getText().toString());
                 playerNames = getPlayerNames();
                 Player[] players = new Player[playerNames.length + 1];
-                players[0] = new MyPlayer("me", "1");
+                players[0] = new MyPlayer(MyName, "1");
                 for (int i = 1; i < players.length; i++) {
                     players[i] = new ComputerPlayer(playerNames[i - 1], i); //just assume computer players for now
                 }
@@ -147,14 +147,30 @@ public class CreateGamePopup extends Activity {
                 game.gameMap = new GameMap();
                 gameEngine.assignCountriesToPlayersRandomly(game);
                 game.save();
+                setResult(RESULT_OK);
                 finish();
             }
         });
 
     }
 
+    private String remTrailingWhiteSpace(String s) {
+        if (s == null) {
+            return "";
+        }
+        if (s.length() < 1) {
+            return "";
+        }
+        Character c = s.charAt(s.length() - 1);
+        while (Character.isWhitespace(c) && s.length() > 0) {
+            s = s.substring(0, s.length() - 1);
+            c = s.charAt(s.length() - 1);
+        }
+        return s;
+    }
+
     private void editPlayer(CheckBox cb) {
-        String newName = player_name_field.getText().toString();
+        String newName = remTrailingWhiteSpace(player_name_field.getText().toString());
         if (newName.isEmpty()) {
             return;
         }
@@ -235,6 +251,9 @@ public class CreateGamePopup extends Activity {
             if (cb.getText().equals(playerName)) {
                 return true;
             }
+        }
+        if (playerName.equals(MyName)) {
+            return true;
         }
         return false;
     }

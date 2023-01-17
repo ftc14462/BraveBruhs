@@ -468,6 +468,8 @@ public class GameEngine {
         } else {
             status += " increasing by " + BONUS_INCREMENT;
         }
+        int cardsLeft = game.gameMap.getCountries().length - game.usedCardIds.size();
+        status += ". Cards left: " + cardsLeft + " out of: " + game.gameMap.getCountries().length + ".";
         return status;
     }
 
