@@ -35,7 +35,7 @@ class Player implements Serializable {
 //    private ArrayList<Continent> continents;
     private ArrayList<Card> cards;
     private int reserveArmies;
-    static final String[] COLORS = {"#CC0000", "#007700", "#0000CC", "#aaaa00", "#0077CC", "#770077", "#000000", "#FF7700", "#00FF77", "#7700FF", "#cf7cc4", "#531c1c", "#b35300"};
+    static final String[] COLORS = {"#CC0000", "#007700", "#0000CC", "#aaaa00", "#0077CC", "#770077", "#b35300", "#000050", "#FF7700", "#cf7cc4", "#00FF77", "#7700FF", "#505005"};
     private boolean alive = true;
     private String phoneNumber;
 

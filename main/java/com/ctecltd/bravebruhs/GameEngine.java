@@ -23,7 +23,7 @@ public class GameEngine {
     private static final int OWN_COUNTRY_BONUS = 2;
     private static final int STARTING_FIXED_BONUS = 8;
     private PlayerTurnStage currentPlayerTurnStage = PlayerTurnStage.TURN_IN_CARDS;
-    private boolean playerWonABattle = false;
+    //    private boolean playerWonABattle = false;
     private static GameEngine gameEngineInstance = null;
     private static Card[] cardDeck;
     //    private static ArrayList<Integer> usedCardIds;
@@ -82,14 +82,6 @@ public class GameEngine {
 
     public PlayerTurnStage getCurrentPlayerTurnStage() {
         return currentPlayerTurnStage;
-    }
-
-    public boolean isPlayerWonABattle() {
-        return playerWonABattle;
-    }
-
-    public void setPlayerWonABattle(boolean playerWonABattle) {
-        this.playerWonABattle = playerWonABattle;
     }
 
     public int getCurrentCardTurnInBonus() {
@@ -168,17 +160,18 @@ public class GameEngine {
             countryArrayList.remove(countryID);
         }
 
-        int remainingArmies = assignGame.startingArmies - (int) (armiesPerCountry * countries.length / assignGame.players.length);
+        int remainingArmies = assignGame.startingArmies * assignGame.players.length - (int) (armiesPerCountry * countries.length);
         int armiesPlaced = 0;
         while (armiesPlaced < remainingArmies) {
             Player thisPlayer = assignGame.players[playerID];
             int countryID = random.nextInt(countries.length - 1);
             Country country = countries[countryID];
-            Player countryPlayer = country.getPlayer();
-            if (countryPlayer.equals(thisPlayer)) {
-                country.addArmies(1);
-                armiesPlaced++;
+            while (!country.getPlayer().equals(thisPlayer)) {
+                countryID = random.nextInt(countries.length - 1);
+                country = countries[countryID];
             }
+            country.addArmies(1);
+            armiesPlaced++;
             playerID++;
             if (playerID >= assignGame.players.length) {
                 playerID = 0;
@@ -233,6 +226,10 @@ public class GameEngine {
     public static String[] getPlayerNames() {
         getGameEngineInstance();
 //        String names = "";
+        Player[] players = gameEngineInstance.game.players;
+        if (players == null) {
+            return null;
+        }
         String[] names = new String[getGameEngineInstance().game.players.length];
         for (int i = 0; i < gameEngineInstance.game.players.length; i++) {
 //            names += gameEngineInstance.players[i].getName() + "\n";
@@ -256,10 +253,8 @@ public class GameEngine {
 
     public static int getNumStartingArmies() {
         getGameEngineInstance();
-        if (gameEngineInstance.game.startingArmies > 0) {
-
-        } else {
-            gameEngineInstance.game.startingArmies = (int) (2 * gameEngineInstance.game.gameMap.getCountries().length / gameEngineInstance.game.players.length);
+        if (gameEngineInstance.game == null) {
+            return -1;
         }
         return gameEngineInstance.game.startingArmies;
     }
@@ -609,7 +604,7 @@ public class GameEngine {
             System.out.println("bad juju");
             return;
         }
-        setPlayerWonABattle(false);
+        setAttackerWonABattle(false);
 
         if (player.getCards().size() > 4) {
             int turnInBonus = getCurrentCardTurnInBonus();
@@ -728,5 +723,18 @@ public class GameEngine {
             return null;
         }
         return (Game[]) arrayList.toArray(new Game[0]);
+    }
+
+    public boolean myPlayerLost() {
+        for (Player player : game.players) {
+            if (player.isMyPlayer()) {
+                if (player.isDead()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 }

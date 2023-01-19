@@ -33,6 +33,7 @@ public class CreateGamePopup extends Activity {
     private String[] playerNames;
     private GameEngine gameEngine;
     private String MyName = "me";
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,8 @@ public class CreateGamePopup extends Activity {
         setContentView(R.layout.activity_create_game_popup);
 
         gameEngine = GameEngine.getGameEngineInstance();
+        game = new Game();
+        game.gameMap = new GameMap();
 
         //.. Load field from GameEngine defaults
         Spinner spinner = (Spinner) findViewById(R.id.gameMapSpinner);
@@ -54,8 +57,10 @@ public class CreateGamePopup extends Activity {
 //        player_names_list_layout.setText();
         playerNames = gameEngine.getPlayerNames();
         playerNameCheckBoxes = new ArrayList<CheckBox>();
-        for (String playerName : playerNames) {
-            addPlayer(playerName);
+        if (playerNames != null) {
+            for (String playerName : playerNames) {
+                addPlayer(playerName);
+            }
         }
         removeButton = findViewById(R.id.remove_player_button);
         removeButton.setEnabled(false);
@@ -128,7 +133,6 @@ public class CreateGamePopup extends Activity {
 
             @Override
             public void onClick(View v) {
-                Game game = new Game();
                 try {
                     game.setStartingArmies(Integer.parseInt(startingArmiesField.getText().toString()));
                 } catch (Exception e) {
@@ -210,6 +214,7 @@ public class CreateGamePopup extends Activity {
         CheckBox cb = new CheckBox(getApplicationContext());
         cb.setText(playerName);
         playerNameCheckBoxes.add(cb);
+        startingArmiesField.setText(calcStartingArmies() + "");
         player_names_list_layout.addView(cb);
         cb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,6 +239,17 @@ public class CreateGamePopup extends Activity {
                 }
             }
         });
+    }
+
+    private int calcStartingArmies() {
+        if (game.gameMap.getCountries().length == 0) {
+            return -1;
+        }
+        if (playerNameCheckBoxes.size() < 1) {
+            return 20;
+        }
+        game.startingArmies = (int) (2 * game.gameMap.getCountries().length / (playerNameCheckBoxes.size() + 1));
+        return game.startingArmies;
     }
 
     private boolean onlyOnePlayerSelected() {

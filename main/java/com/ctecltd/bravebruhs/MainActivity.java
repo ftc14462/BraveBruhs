@@ -141,25 +141,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void initializeFields() {
         updateGameList();
-        Friend matt = new Friend("Matthew", "7203919024");
-//        MyPlayer myPlayer = new MyPlayer("weirdo", "7208786164");
-        Friend[] friends = new Friend[]{matt};
-        Player hal = new ComputerPlayer("hal", 1);
-        Player[] plrs = new Player[]{new MyPlayer("weirdo", "7208786164"), hal};
-
-        GameEngine.getFixedCardBonus();
-
-        Game game = new Game(friends, new MyPlayer("weirdo", "7208786164"), new GameMap());
-        game = new Game(new Player[]{new MyPlayer("bob", "7208786164"), new ComputerPlayer("xr", 1)}, new GameMap());
-        gameEngine.setGame(game);
-        gameEngine.assignCountriesToPlayersRandomly(game);
-        gameEngine.updateConqueredContinents();
-//        activeGamesArrayAdapter.add(game);
-
-        game = new Game(plrs, new GameMap());
-        gameEngine.setGame(game);
-        gameEngine.assignCountriesToPlayersRandomly(game);
-        gameEngine.updateConqueredContinents();
+//        Friend matt = new Friend("Matthew", "7203919024");
+////        MyPlayer myPlayer = new MyPlayer("weirdo", "7208786164");
+//        Friend[] friends = new Friend[]{matt};
+//        Player hal = new ComputerPlayer("hal", 1);
+//        Player[] plrs = new Player[]{new MyPlayer("weirdo", "7208786164"), hal};
+//
+//        GameEngine.getFixedCardBonus();
+//
+//        Game game = new Game(friends, new MyPlayer("weirdo", "7208786164"), new GameMap());
+//        game = new Game(new Player[]{new MyPlayer("bob", "7208786164"), new ComputerPlayer("xr", 1)}, new GameMap());
+//        gameEngine.setGame(game);
+//        gameEngine.assignCountriesToPlayersRandomly(game);
+//        gameEngine.updateConqueredContinents();
+////        activeGamesArrayAdapter.add(game);
+//
+//        game = new Game(plrs, new GameMap());
+//        gameEngine.setGame(game);
+//        gameEngine.assignCountriesToPlayersRandomly(game);
+//        gameEngine.updateConqueredContinents();
 //        activeGamesArrayAdapter.add(game);
 //        activeGamesArrayAdapter.notifyDataSetChanged();
 
