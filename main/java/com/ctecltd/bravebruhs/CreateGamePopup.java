@@ -204,6 +204,9 @@ public class CreateGamePopup extends Activity {
         if (isDuplicate(playerName)) {
             return;
         }
+        if (playerNameCheckBoxes.size() > Player.COLORS.length - 2) {//leave room for yourself
+            return;
+        }
         CheckBox cb = new CheckBox(getApplicationContext());
         cb.setText(playerName);
         playerNameCheckBoxes.add(cb);

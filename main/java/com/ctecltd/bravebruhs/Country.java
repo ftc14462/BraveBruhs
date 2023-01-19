@@ -1,5 +1,7 @@
 package com.ctecltd.bravebruhs;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -64,6 +66,9 @@ class Country implements Serializable {
 
     public void setArmies(int armies) {
         this.armies = armies;
+        if (armies < 1) {
+            Log.println(Log.DEBUG, "zero armies set", "d");
+        }
     }
 
     public int getArmies() {

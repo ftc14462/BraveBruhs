@@ -28,6 +28,7 @@ public class EnterGame extends Activity {
         enter_game_label = findViewById(R.id.enter_game_label);
         enter_game_label.setTextColor(Color.BLACK);
         enter_game_label.setTypeface(Typeface.MONOSPACE);
+        enter_game_label.setTextSize(StatusPopup.FONTSIZE);
         enter_game_label.setText(gameEngine.getStatus());
     }
 

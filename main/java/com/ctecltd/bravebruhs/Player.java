@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 
 
-class Player implements Serializable{
+class Player implements Serializable {
     static final long serialVersionUID = 42L;
 
     protected String color;
@@ -35,7 +35,7 @@ class Player implements Serializable{
 //    private ArrayList<Continent> continents;
     private ArrayList<Card> cards;
     private int reserveArmies;
-    private static final String[] COLORS = {"#007700", "#0000CC", "#DDDD00", "#0077CC", "#770077", "#000000", "#FF7700", "#00FF77", "#7700FF", "#77FF00", "#0077FF", "#FF0077"};
+    static final String[] COLORS = {"#CC0000", "#007700", "#0000CC", "#aaaa00", "#0077CC", "#770077", "#000000", "#FF7700", "#00FF77", "#7700FF", "#cf7cc4", "#531c1c", "#b35300"};
     private boolean alive = true;
     private String phoneNumber;
 
@@ -51,7 +51,8 @@ class Player implements Serializable{
     }
 
     //for serialization
-    public Player(){}
+    public Player() {
+    }
 
     public Player(Friend friend, int id) {
         this(friend.getName(), id, friend.getPhoneNumber());
@@ -178,7 +179,7 @@ class Player implements Serializable{
         this.phoneNumber = phoneNumber;
     }
 
-    public boolean isComputerPlayer(){
+    public boolean isComputerPlayer() {
         return false;
     }
 
@@ -187,7 +188,7 @@ class Player implements Serializable{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return name;
     }
 }

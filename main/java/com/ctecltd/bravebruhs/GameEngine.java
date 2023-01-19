@@ -671,7 +671,11 @@ public class GameEngine {
                 invasionArmies = 1;
             }
             defendingCountry.setArmies(invasionArmies);
-            attackingCountry.setArmies(attackerRemainingArmies + 1 - invasionArmies);
+            int stayBackArmies = attackerRemainingArmies + 1 - invasionArmies;
+            if (stayBackArmies < 1) {
+                stayBackArmies = 1;
+            }
+            attackingCountry.setArmies(stayBackArmies);
             Continent defendingContinent = getContinent(defendingCountry);
             if (defendingContinent.checkIfConqueredBy(getCurrentPlayer())) {
                 defendingContinent.setPlayer(getCurrentPlayer());

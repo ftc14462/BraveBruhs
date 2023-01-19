@@ -18,7 +18,7 @@ import static com.ctecltd.bravebruhs.GameTurnController.StatusPopupRequestCode;
 
 public class StatusPopup extends Activity {
 
-    private static final float FONTSIZE = 16;
+    static final float FONTSIZE = 16;
     private GameEngine gameEngine;
     private LinearLayout status_popup_layout;
 

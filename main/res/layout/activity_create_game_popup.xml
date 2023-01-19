@@ -5,58 +5,66 @@
     android:orientation="horizontal"
     tools:context="com.ctecltd.bravebruhs.CreateGamePopup">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/opponent_names_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Opponent Names"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <LinearLayout
-            android:id="@+id/player_names_list_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"></LinearLayout>
-
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/remove_player_button"
+
+            <TextView
+                android:id="@+id/opponent_names_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Remove Player" />
+                android:text="Opponent Names"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <Button
-                android:id="@+id/edit_player_button"
+
+            <LinearLayout
+                android:id="@+id/player_names_list_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit Player" />
+                android:orientation="vertical" />
 
 
-            <Button
-                android:id="@+id/add_player_button"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Player" />
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/player_name_field"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <Button
+                    android:id="@+id/remove_player_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remove Player" />
+
+                <Button
+                    android:id="@+id/edit_player_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Player" />
+
+
+                <Button
+                    android:id="@+id/add_player_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Player" />
+
+                <EditText
+                    android:id="@+id/player_name_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+
         </LinearLayout>
-
-    </LinearLayout>
+    </ScrollView>
 
     <LinearLayout
         android:layout_width="wrap_content"
