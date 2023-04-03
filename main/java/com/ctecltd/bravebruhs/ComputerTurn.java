@@ -15,8 +15,8 @@ public class ComputerTurn extends NotMyTurn {
     protected void doAlsoOnCreate() {
         gameEngine.doComputerTurn();
         turn = gameEngine.getCurrentGameTurn();
-        String sms_message = turn.getSMS_Message();
-        SMSObserver.getSMSObserver().updateSMS(sms_message);
+//        String sms_message = turn.getSMS_Message();
+//        SMSObserver.getSMSObserver().updateSMS(sms_message);
         updateMapLabels();
         updatePlayerNameLabel();
         ok_button.setText(OK_TEXT);

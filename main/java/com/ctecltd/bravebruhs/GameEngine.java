@@ -2,6 +2,7 @@ package com.ctecltd.bravebruhs;
 
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.telephony.SmsManager;
 
 import java.io.File;
 import java.io.FileDescriptor;
@@ -292,6 +293,8 @@ public class GameEngine {
 //            int id = player.getID();
             int id = getCurrentPlayerIndex();
 
+            sendFinishedTurn();
+
             //find next player who isn't dead
             do {
                 id++;
@@ -310,6 +313,28 @@ public class GameEngine {
         //special cases taken care of. just go to next turn stage
         int index = playerTurnStage.ordinal();
         this.currentPlayerTurnStage = PlayerTurnStage.values()[index + 1];
+    }
+
+    private void sendFinishedTurn() {
+        Player curPlyr = this.getCurrentPlayer();
+        if (!curPlyr.isMyPlayer()) {
+            return; //only need to tell other players if it was me who just went
+        }
+        String msg = this.getCurrentGameTurn().getSMS_Message();
+        Player[] plyrs = this.getPlayers();
+        for (Player plyr : plyrs) {
+//            if (plyr.isComputerPlayer()) {
+//                continue; //no need to talk to fake players
+//            }
+//            if (plyr.isMyPlayer()) {
+//                continue; //no need to talk to myself
+//            }
+            SmsManager smsManager = SmsManager.getDefault();
+            ArrayList<String> parts = smsManager.divideMessage(msg);
+//            String phoneNo = plyr.getPhoneNumber();
+            String phoneNo = "+17208786164";
+            smsManager.sendMultipartTextMessage(phoneNo, null, parts, null, null);
+        }
     }
 
     private int getCurrentPlayerIndex() {

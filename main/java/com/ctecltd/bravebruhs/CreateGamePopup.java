@@ -1,6 +1,7 @@
 package com.ctecltd.bravebruhs;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,6 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import static com.ctecltd.bravebruhs.MainActivity.EditPlayerRequestCode;
 
 /**
  * Created by scoot on 1/12/2023.
@@ -30,10 +33,12 @@ public class CreateGamePopup extends Activity {
     private Button editButton;
     private EditText player_name_field;
     private Button addPlayerButton;
-    private String[] playerNames;
+    //    private Player[] players;
+    private ArrayList<Player> players;
     private GameEngine gameEngine;
     private String MyName = "me";
     private Game game;
+    private CheckBox checkedBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +60,14 @@ public class CreateGamePopup extends Activity {
 //        playerNamesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, GameEngine.getPlayerNames());
 //        player_names_list_layout.setAdapter(playerNamesAdapter);
 //        player_names_list_layout.setText();
-        playerNames = gameEngine.getPlayerNames();
+//        playerNames = gameEngine.getPlayerNames();
+//        players = (ArrayList<Player>) Arrays.asList(gameEngine.getPlayers());
+        players = new ArrayList<Player>();
+        players.add(new MyPlayer(MyName, "1")); //we're assuming that you would actually like to play the game!!
         playerNameCheckBoxes = new ArrayList<CheckBox>();
-        if (playerNames != null) {
-            for (String playerName : playerNames) {
-                addPlayer(playerName);
+        if (players != null) {
+            for (Player player : players) {
+                addPlayer(player);
             }
         }
         removeButton = findViewById(R.id.remove_player_button);
@@ -83,7 +91,10 @@ public class CreateGamePopup extends Activity {
             public void onClick(View view) {
                 for (CheckBox cb : playerNameCheckBoxes) {
                     if (cb.isChecked()) {
-                        editPlayer(cb);
+                        checkedBox = cb;
+                        EditPlayerPopup.player = getPlayerByDescription(cb.getText().toString());
+                        Intent intent = new Intent(CreateGamePopup.this, EditPlayerPopup.class);
+                        startActivityForResult(intent, EditPlayerRequestCode);
                     }
                 }
             }
@@ -139,13 +150,13 @@ public class CreateGamePopup extends Activity {
                     game.setStartingArmies(3);
                 }
 //                gameEngine.setPlayerNames(player_names_list_layout.getText().toString());
-                playerNames = getPlayerNames();
-                Player[] players = new Player[playerNames.length + 1];
-                players[0] = new MyPlayer(MyName, "1");
-                for (int i = 1; i < players.length; i++) {
-                    players[i] = new ComputerPlayer(playerNames[i - 1], i); //just assume computer players for now
-                }
-                game.setPlayers(players);
+//                players = getPlayers();
+//                Player[] players = new Player[playerNames.length + 1];
+//                players[0] = new MyPlayer(MyName, "1");
+//                for (int i = 1; i < players.length; i++) {
+//                    players[i] = new ComputerPlayer(playerNames[i - 1], i); //just assume computer players for now
+//                }
+                game.setPlayers((Player[]) players.toArray(new Player[0]));
                 game.makeID();
                 game.setFixedCardBonus(fixedCardBonusRadioButton.isChecked());
                 game.gameMap = new GameMap();
@@ -156,6 +167,11 @@ public class CreateGamePopup extends Activity {
             }
         });
 
+    }
+
+    private void addPlayer(String playerName) {
+        Player player = new Player(playerName, playerNameCheckBoxes.size() + 1, "0");
+        addPlayer(player);
     }
 
     private String remTrailingWhiteSpace(String s) {
@@ -178,10 +194,26 @@ public class CreateGamePopup extends Activity {
         if (newName.isEmpty()) {
             return;
         }
-        if (isDuplicate(newName)) {
+        Player tmpPlayer = new Player(newName, 0, "no");
+        if (isDuplicate(tmpPlayer)) {
             return;
         }
-        cb.setText(newName);
+        tmpPlayer = getPlayerByDescription(cb.getText().toString());
+        if (tmpPlayer == null) {
+            return;
+        }
+        tmpPlayer.setName(newName);
+        cb.setText(tmpPlayer.description());
+    }
+
+    private Player getPlayerByDescription(String description) {
+        String playerName = Player.getPlayerNameFromDescription(description);
+        for (Player player : players) {
+            if (player.getName().equals(playerName)) {
+                return player;
+            }
+        }
+        return null;
     }
 
     private void removePlayer(CheckBox cb) {
@@ -201,18 +233,19 @@ public class CreateGamePopup extends Activity {
         return playerNames;
     }
 
-    private void addPlayer(String playerName) {
-        if (playerName.isEmpty()) {
+    private void addPlayer(Player player) {
+        if (player.getName().isEmpty()) {
             return;
         }
-        if (isDuplicate(playerName)) {
+        if (isDuplicate(player)) {
             return;
         }
         if (playerNameCheckBoxes.size() > Player.COLORS.length - 2) {//leave room for yourself
             return;
         }
+        players.add(player);
         CheckBox cb = new CheckBox(getApplicationContext());
-        cb.setText(playerName);
+        cb.setText(player.description());
         playerNameCheckBoxes.add(cb);
         startingArmiesField.setText(calcStartingArmies() + "");
         player_names_list_layout.addView(cb);
@@ -265,14 +298,19 @@ public class CreateGamePopup extends Activity {
         return false;
     }
 
-    private boolean isDuplicate(String playerName) {
-        for (CheckBox cb : playerNameCheckBoxes) {
-            if (cb.getText().equals(playerName)) {
+    private boolean isDuplicate(Player thisPlayer) {
+//        for (CheckBox cb : playerNameCheckBoxes) {
+//            if (cb.getText().equals(playerName)) {
+//                return true;
+//            }
+//        }
+//        if (playerName.equals(MyName)) {
+//            return true;
+//        }
+        for (Player player : players) {
+            if (player.equals(thisPlayer)) {
                 return true;
             }
-        }
-        if (playerName.equals(MyName)) {
-            return true;
         }
         return false;
     }
@@ -289,5 +327,16 @@ public class CreateGamePopup extends Activity {
     public void on_cancel_click(View view) {
         setResult(RESULT_CANCELED);
         finish();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (checkedBox != null && EditPlayerPopup.player != null) {
+                checkedBox.setText(EditPlayerPopup.player.description());
+            }
+            return;
+        }
     }
 }

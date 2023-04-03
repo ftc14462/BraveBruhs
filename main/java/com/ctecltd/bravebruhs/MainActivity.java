@@ -1,6 +1,14 @@
 package com.ctecltd.bravebruhs;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -36,9 +44,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Game selectedPendingGame;
     private Button open_game_button;
     private GameEngine gameEngine;
+    private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 0;
+    private static final int MY_PERMISSIONS_REQUEST_SEND_SMS = 1;
+    private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 2;
     private static final int EnterGameRequestCode = 1;
     protected final static int ContinueGameRequestCode = 2;
     private final static int CreateGameRequestCode = 3;
+    final static int EditPlayerRequestCode = 4;
     private ListView finished_games_list;
     private Game selectedFinishedGame;
     private Button open_finished_game_button;
@@ -51,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         GameEngine.context = getApplicationContext();
         gameEngine = GameEngine.getGameEngineInstance();
+
+        checkPermissions();
 
         active_games_list = findViewById(R.id.active_games_list);
         finished_games_list = findViewById(R.id.finished_games_list);
@@ -137,6 +151,80 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         open_game_button.setEnabled(false);
 
         initializeFields();
+    }
+
+    private void checkPermissions() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.RECEIVE_SMS)) {
+                showDialog("Receive SMS", this,
+                        Manifest.permission.RECEIVE_SMS, MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+
+            } else {
+                ActivityCompat
+                        .requestPermissions(
+                                this,
+                                new String[]{Manifest.permission.RECEIVE_SMS},
+                                MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+            }
+        }
+
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.SEND_SMS)) {
+                showDialog("Send SMS", this,
+                        Manifest.permission.SEND_SMS, MY_PERMISSIONS_REQUEST_SEND_SMS);
+
+            } else {
+                ActivityCompat
+                        .requestPermissions(
+                                this,
+                                new String[]{Manifest.permission.SEND_SMS},
+                                MY_PERMISSIONS_REQUEST_SEND_SMS);
+            }
+        }
+
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_SMS) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.READ_SMS)) {
+                showDialog("Read SMS", this,
+                        Manifest.permission.READ_SMS, MY_PERMISSIONS_REQUEST_READ_SMS);
+
+            } else {
+                ActivityCompat
+                        .requestPermissions(
+                                this,
+                                new String[]{Manifest.permission.READ_SMS},
+                                MY_PERMISSIONS_REQUEST_READ_SMS);
+            }
+        }
+    }
+
+    private void showDialog(final String msg, final Context context,
+                            final String permission, final int perm_int) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setCancelable(true);
+        alertBuilder.setTitle("Permission necessary");
+        alertBuilder.setMessage(msg + " permission is necessary");
+        alertBuilder.setPositiveButton(android.R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions((Activity) context,
+                                new String[]{permission},
+                                perm_int);
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
     }
 
     private void initializeFields() {

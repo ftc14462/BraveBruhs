@@ -5,12 +5,17 @@ package com.ctecltd.bravebruhs;
  */
 
 class ComputerPlayer extends Player {
-    public ComputerPlayer(String hal, int i) {
-        super(hal,i,"");
+    public ComputerPlayer(String name, int id) {
+        super(name, id, "");
     }
 
     @Override
-    public boolean isComputerPlayer(){
+    public boolean isComputerPlayer() {
         return true;
+    }
+
+    @Override
+    public String description() {
+        return this.getName() + " : computer : phone 0";
     }
 }

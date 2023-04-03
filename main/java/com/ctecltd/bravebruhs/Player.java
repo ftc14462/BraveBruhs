@@ -191,4 +191,18 @@ class Player implements Serializable {
     public String toString() {
         return name;
     }
+
+    public String description() {
+        return this.getName() + " : human : phone " + this.phoneNumber;
+    }
+
+    public static String getPlayerNameFromDescription(String description) {
+        if (description == null) {
+            return null;
+        }
+        String[] parts = description.split(":");
+        String name = parts[0];
+        return name.trim();
+
+    }
 }
