@@ -9,17 +9,21 @@ import android.view.View;
 public class ComputerTurn extends NotMyTurn {
 
     private static final String OK_TEXT = "Oh Ya?";
+    private GameTurn turn;
 
     @Override
     protected void doAlsoOnCreate() {
         gameEngine.doComputerTurn();
+        turn = gameEngine.getCurrentGameTurn();
+        String sms_message = turn.getSMS_Message();
+        SMSObserver.getSMSObserver().updateSMS(sms_message);
         updateMapLabels();
         updatePlayerNameLabel();
         ok_button.setText(OK_TEXT);
     }
 
+    @Override
     protected void updatePlayerNameLabel() {
-        GameTurn turn = gameEngine.getCurrentGameTurn();
         if (turn == null) {
             super.updatePlayerNameLabel();
             return;

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 class GameTurn implements Serializable {
     static final long serialVersionUID = 42L;
+    private Game game;
     private int armiesPlaced;
     public Player currentPlayer;
     public int turnNumber;
@@ -29,6 +30,7 @@ class GameTurn implements Serializable {
         this.attackedCountries = new ArrayList<Country>();
         this.armiesPlaced = currentPlayer.getReserveArmies();
         this.conqueredPlayers = new ArrayList<Player>();
+        this.game = game;
     }
 
     public GameTurn() {
@@ -143,5 +145,20 @@ class GameTurn implements Serializable {
 
     public void addConqueredPlayer(Player player) {
         conqueredPlayers.add(player);
+    }
+
+    public String getSMS_Message() {
+        String message = "";
+        message += "GameID=" + gameID + "\n";
+        message += "Turn#=" + turnNumber + "\n";
+        message += "Player=" + currentPlayer + "\n";
+        message += "Turned in cards=" + turn_in_cards + "\n";
+        message += "Armies placed=" + armiesPlaced + "\n";
+        message += "Countries attacked=" + attackedCountries + "\n";
+        message += "Got Card=" + receivedCard + "\n";
+        message += "Next player=" + game.currentPlayer + "\n";
+        message += "Next player#=" + game.currentPlayer.getPhoneNumber() + "\n";
+        message += "Game Map=" + game.gameMap.toSMS() + "\n";
+        return message;
     }
 }

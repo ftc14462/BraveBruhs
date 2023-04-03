@@ -207,6 +207,7 @@ public class AttackPopup extends Activity {
     }
 
     private void doAttackerWon() {
+        gameEngine.attackerWonABattle();
         attack_popup_ATTACK.setEnabled(false);
         invasion_armies_label.setText("\nSelect number of armies to invade with:");
         number_of_invading_armies_field.setVisibility(View.VISIBLE);
@@ -269,7 +270,7 @@ public class AttackPopup extends Activity {
             } else {
                 defendingContinent.setPlayer(null);
             }
-            gameEngine.attackerWonABattle();
+//            gameEngine.attackerWonABattle();
         }
         finish();
     }

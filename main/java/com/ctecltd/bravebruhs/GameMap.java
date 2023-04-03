@@ -183,4 +183,12 @@ class GameMap implements Serializable {
     public void setContinents(Continent[] continents) {
         this.continents = continents;
     }
+
+    public String toSMS() {
+        String sms = "";
+        for (Country country : countries) {
+            sms += country.getName() + "-"+country.getPlayer() + "-" + country.getArmies() + ",";
+        }
+        return sms;
+    }
 }
