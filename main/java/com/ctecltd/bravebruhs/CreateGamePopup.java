@@ -266,7 +266,7 @@ public class CreateGamePopup extends Activity {
                 if (onlyOnePlayerSelected()) {
                     editButton.setEnabled(true);
                     CheckBox cb = (CheckBox) view;
-                    player_name_field.setText(cb.getText());
+                    player_name_field.setText(cb.getText().subSequence(0, 8));
                 } else {
                     editButton.setEnabled(false);
                 }
@@ -336,6 +336,7 @@ public class CreateGamePopup extends Activity {
             if (checkedBox != null && EditPlayerPopup.player != null) {
                 checkedBox.setText(EditPlayerPopup.player.description());
             }
+            players.set(EditPlayerPopup.player.getID(), EditPlayerPopup.player);
             return;
         }
     }

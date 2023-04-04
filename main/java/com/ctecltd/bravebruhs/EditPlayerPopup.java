@@ -43,14 +43,15 @@ public class EditPlayerPopup extends Activity {
     }
 
     public void on_ok_click(View view) {
-//        if (spinner.getSelectedItem().getClass().equals("Computer")) {
-//            player = new ComputerPlayer(playerNameField.getText().toString(), 0);
-//        } else {
-//            player = new Player(playerNameField.getText().toString(), 0, playerNumberField.getText().toString());
-//        }
+        String playerType = spinner.getSelectedItem().toString();
+        if (playerType.equals("Computer")) {
+            player = new ComputerPlayer(playerNameField.getText().toString(), player.getID());
+        } else {
+            player = new Player(playerNameField.getText().toString(), player.getID(), playerNumberField.getText().toString());
+        }
 
-        player.setName(playerNameField.getText().toString());
-        player.setPhoneNumber(playerNumberField.getText().toString());
+//        player.setName(playerNameField.getText().toString());
+//        player.setPhoneNumber(playerNumberField.getText().toString());
 
         setResult(RESULT_OK);
         finish();
