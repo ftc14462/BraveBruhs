@@ -22,17 +22,18 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             for (int i = 0; i < sms.length; ++i) {
                 SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sms[i]);
 
-                String smsBody = smsMessage.getMessageBody().toString();
-                String address = smsMessage.getOriginatingAddress();
+                smsMessageStr += smsMessage.getMessageBody().toString();
+//                String address = smsMessage.getOriginatingAddress();
 
-                smsMessageStr += "SMS From: " + address + "\n";
-                smsMessageStr += smsBody + "\n";
+//                smsMessageStr += "SMS From: " + address + "\n";
+//                smsMessageStr += smsBody + "\n";
             }
 //            Toast.makeText(context, smsMessageStr, Toast.LENGTH_SHORT).show();
 
             //this will update the UI with message
             SMSObserver inst = SMSObserver.getSMSObserver();
             inst.updateSMS(smsMessageStr);
+            SMSTurnProcessor.processTurn(smsMessageStr);
         }
     }
 }

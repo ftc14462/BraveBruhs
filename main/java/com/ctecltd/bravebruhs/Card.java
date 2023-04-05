@@ -23,6 +23,11 @@ class Card implements Serializable {
     public Card() {
     }
 
+//    public Card(String symbolName, String countryName) {
+//        symbol = CardSymbol.valueOf(symbolName);
+//        country = new Country(countryName);
+//    }
+
     @Override
     public String toString() {
         return symbol.toString() + " " + country + "";
@@ -64,4 +69,18 @@ class Card implements Serializable {
         this.country = country;
     }
 
+//    public static Card[] cardsFromSMS(String sms) {
+//        if (sms.equals("null")) {
+//            return null;
+//        }
+//        sms = sms.replaceAll("[]\n", "");
+//        String[] parts = sms.split(",");
+//        Card[] cards = new Card[parts.length];
+//        int i = 0;
+//        for (String part : parts) {
+//            String[] pp = part.split(" ");
+//            cards[i] = new Card(pp[0], pp[1]);
+//        }
+//
+//    }
 }

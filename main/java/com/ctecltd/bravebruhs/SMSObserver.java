@@ -1,6 +1,7 @@
 package com.ctecltd.bravebruhs;
 
 import java.util.AbstractList;
+import java.util.ArrayList;
 
 /**
  * Created by scoot on 3/24/2023.
@@ -10,6 +11,10 @@ public class SMSObserver {
     private static SMSObserver smsObserverInstance;
     private String sms_message;
     private AbstractList<SMSListener> smsListeners;
+
+    private SMSObserver() {
+        smsListeners = new ArrayList<SMSListener>();
+    }
 
     public static SMSObserver getSMSObserver() {
         if (smsObserverInstance == null) {
@@ -23,12 +28,13 @@ public class SMSObserver {
         fireNewSMS();
     }
 
-    public void addSMSListener(SMSListener listener){
+    public void addSMSListener(SMSListener listener) {
         smsListeners.add(listener);
     }
 
     private void fireNewSMS() {
-        for(SMSListener listener: smsListeners){
+
+        for (SMSListener listener : smsListeners) {
             listener.fireNewSMS(sms_message);
         }
     }

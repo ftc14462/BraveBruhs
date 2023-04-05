@@ -1,7 +1,6 @@
 package com.ctecltd.bravebruhs;
 
 import java.io.Serializable;
-import java.util.AbstractList;
 import java.util.ArrayList;
 
 
@@ -11,9 +10,10 @@ import java.util.ArrayList;
 
 class GameTurn implements Serializable {
     static final long serialVersionUID = 42L;
+    protected static final String GAME_KEY = "<BB>V1.0\n";
     private Game game;
     private int armiesPlaced;
-    public Player currentPlayer;
+    public String currentPlayerName;
     public int turnNumber;
     public String gameID;
     public Card[] turn_in_cards;
@@ -26,9 +26,9 @@ class GameTurn implements Serializable {
     public GameTurn(Game game) {
         this.gameID = game.getID();
         this.turnNumber = game.turnNumber + 1; //start with 1, not zero
-        this.currentPlayer = game.currentPlayer;
+        this.currentPlayerName = game.currentPlayer.getName();
         this.attackedCountries = new ArrayList<Country>();
-        this.armiesPlaced = currentPlayer.getReserveArmies();
+        this.armiesPlaced = game.currentPlayer.getReserveArmies();
         this.conqueredPlayers = new ArrayList<Player>();
         this.game = game;
     }
@@ -56,7 +56,7 @@ class GameTurn implements Serializable {
     public String toString() {
 //        String text = gameID + ": " + turnNumber + "  ";
         String text = turnNumber + ") ";
-        text += currentPlayer + " ";
+        text += currentPlayerName + " ";
         if (turn_in_cards == null) {
             text += "did not turn in cards";
         } else {
@@ -85,7 +85,7 @@ class GameTurn implements Serializable {
             }
         }
         if (playerWon) {
-            text += currentPlayer + " won!";
+            text += currentPlayerName + " won!";
         }
         return text;
     }
@@ -94,12 +94,12 @@ class GameTurn implements Serializable {
         return armiesPlaced;
     }
 
-    public Player getCurrentPlayer() {
-        return currentPlayer;
+    public String getCurrentPlayerName() {
+        return currentPlayerName;
     }
 
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
+    public void setCurrentPlayerName(String currentPlayer) {
+        this.currentPlayerName = currentPlayer;
     }
 
     public int getTurnNumber() {
@@ -148,10 +148,10 @@ class GameTurn implements Serializable {
     }
 
     public String getSMS_Message() {
-        String message = "";
+        String message = GAME_KEY;
         message += "GameID=" + gameID + "\n";
         message += "Turn#=" + turnNumber + "\n";
-        message += "Player=" + currentPlayer + "\n";
+        message += "Player=" + currentPlayerName + "\n";
         message += "Turned in cards=" + turn_in_cards + "\n";
         message += "Armies placed=" + armiesPlaced + "\n";
         message += "Countries attacked=" + attackedCountries + "\n";
@@ -161,4 +161,35 @@ class GameTurn implements Serializable {
         message += "Game Map=" + game.gameMap.toSMS() + "\n";
         return message;
     }
+
+    public static GameTurn newFromSMS(String sms_message) {
+        if (sms_message == null) {
+            return null;
+        }
+        if (!GAME_KEY.equals(sms_message.substring(0, GAME_KEY.length()))) {
+            return null;
+        }
+        String[] parts = sms_message.split("\n");
+        GameTurn gt = new GameTurn();
+        gt.gameID=parts[1].replace("GameID=","");
+        gt.turnNumber= Integer.parseInt(parts[2].replace("Turn#=",""));
+        gt.currentPlayerName=parts[3].replace("Player=","");
+//        gt.turn_in_cards=Card.cardsFromSMS(parts[4].replace("Turned in cards=",""));
+        return gt;
+    }
+
+    public static boolean isSMSGameTurn(String sms_message) {
+        if (sms_message == null) {
+            return false;
+        }
+        if (!GAME_KEY.equals(sms_message.substring(0, GAME_KEY.length()))) {
+            return false;
+        }
+        return true;
+    }
+
+    public void setArmiesPlaced(int armiesPlaced) {
+        this.armiesPlaced = armiesPlaced;
+    }
+
 }

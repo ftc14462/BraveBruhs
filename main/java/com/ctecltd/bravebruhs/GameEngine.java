@@ -323,12 +323,12 @@ public class GameEngine {
         String msg = this.getCurrentGameTurn().getSMS_Message();
         Player[] plyrs = this.getPlayers();
         for (Player plyr : plyrs) {
-//            if (plyr.isComputerPlayer()) {
-//                continue; //no need to talk to fake players
-//            }
-//            if (plyr.isMyPlayer()) {
-//                continue; //no need to talk to myself
-//            }
+            if (plyr.isComputerPlayer()) {
+                continue; //no need to talk to fake players
+            }
+            if (plyr.isMyPlayer()) {
+                continue; //no need to talk to myself
+            }
             SmsManager smsManager = SmsManager.getDefault();
             ArrayList<String> parts = smsManager.divideMessage(msg);
 //            String phoneNo = plyr.getPhoneNumber();
@@ -761,5 +761,20 @@ public class GameEngine {
             }
         }
         return false;
+    }
+
+    public Card getCardByName(String cardName) {
+        if (cardName == null) {
+            return null;
+        }
+        if (cardName.equals("null")) {
+            return null;
+        }
+        for (Card card : cardDeck) {
+            if (card.toString().equals(cardName)) {
+                return card;
+            }
+        }
+        return null;
     }
 }
