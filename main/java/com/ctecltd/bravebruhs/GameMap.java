@@ -187,8 +187,40 @@ class GameMap implements Serializable {
     public String toSMS() {
         String sms = "";
         for (Country country : countries) {
-            sms += country.getName() + "-"+country.getPlayer() + "-" + country.getArmies() + ",";
+            sms += country.getName() + "-" + country.getPlayer() + "-" + country.getArmies() + ",";
         }
         return sms;
+    }
+
+    public void loadSMS(String gameMapText) {
+        if (gameMapText == null) {
+            return;
+        }
+        if (gameMapText.length() == 0) {
+            return;
+        }
+        String[] countriesText = gameMapText.split(",");
+        if (countries.length != countriesText.length) {
+            return;
+        }
+        GameEngine gameEngine = GameEngine.getGameEngineInstance();
+        for (Country country : countries) {
+            for (String countryText : countriesText) {
+                String[] parts = countryText.split("-");
+                String countryName = parts[0];
+                if (countryName.equals(country.getName())) {
+                    String playerName = parts[1];
+                    int armies = Integer.parseInt(parts[2]);
+                    Player player = gameEngine.getPlayerFromName(playerName);
+                    if (player == null) {
+                        continue;
+                    }
+                    country.setPlayer(player);
+                    country.setArmies(armies);
+                    break;
+//                    continue;
+                }
+            }
+        }
     }
 }

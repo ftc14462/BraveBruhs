@@ -12,9 +12,11 @@ import static com.ctecltd.bravebruhs.GameTurnController.GameOverRequestCode;
 public class NotMyTurn extends MapActivity {
 
     private static final String OK_TEXT = "Ciao!";
+    public static NotMyTurn notMyTurnInstance;
 
     @Override
     protected void doAlsoOnCreate() {
+        notMyTurnInstance = this;
         ok_button.setText(OK_TEXT);
     }
 

@@ -777,4 +777,16 @@ public class GameEngine {
         }
         return null;
     }
+
+    public Player getPlayerFromName(String playerName) {
+        if (playerName == null) {
+            return null;
+        }
+        for (Player player : game.players) {
+            if (player.getName().equals(playerName)) {
+                return player;
+            }
+        }
+        return null;
+    }
 }

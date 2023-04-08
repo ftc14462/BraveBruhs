@@ -25,6 +25,7 @@ public class GameTurnController extends Activity {
     protected static final int GameOverRequestCode = 11;
     protected static final int NotMyTurnRequestCode = 12;
     protected static final int BattleLogPopupRequestCode = 13;
+    protected static GameTurnController gameTurnControllerInstance;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class GameTurnController extends Activity {
 
         gameEngine = GameEngine.getGameEngineInstance();
         intent = new Intent();
+        gameTurnControllerInstance = this;
 
         onActivityResult(TurnInCardsRequestCode, RESULT_OK, intent);
     }

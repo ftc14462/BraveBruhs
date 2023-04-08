@@ -3,6 +3,8 @@ package com.ctecltd.bravebruhs;
 
 import java.util.ArrayList;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by scoot on 4/5/2023.
  */
@@ -33,6 +35,9 @@ class SMSTurnProcessor implements SMSListener {
             return;
         }
         String gameID = parts[1].replace("GameID=", "");
+        if (game.ID == null) {
+            return;
+        }
         if (!game.ID.equals(gameID)) {
             return;
         }
@@ -51,6 +56,7 @@ class SMSTurnProcessor implements SMSListener {
         String gotCard = parts[7].replace("Got Card=", "");
         String nextPlayer = parts[8].replace("Next player=", "");
         String nextPlayerNumber = parts[9].replace("Next player#=", "");
+        String gameMapText = parts[10].replace("Game Map=", "");
 
         GameTurn gameTurn = game.getCurrentGameTurn();
         ArrayList<Country> attackedCountries = gameTurn.getAttackedCountries();
@@ -75,6 +81,11 @@ class SMSTurnProcessor implements SMSListener {
         Card receivedCard = gameEngine.getCardByName(gotCard);
         gameTurn.setReceivedCard(receivedCard);
         gameTurn.setCurrentPlayerName(thisPlayerName);
-        gameEngine.playerTurnStageFinished(PlayerTurnStage.TURN_IN_CARDS);
+        GameMap gameMap = game.getGameMap();
+        gameMap.loadSMS(gameMapText);
+        gameEngine.playerTurnStageFinished(PlayerTurnStage.COLLECT_CARD);
+        NotMyTurn.notMyTurnInstance.setResult(RESULT_OK);
+        NotMyTurn.notMyTurnInstance.finish(); //close NotMyTurnWindow
+//        GameTurnController.gameTurnControllerInstance.onActivityResult(0,RESULT_OK,null);
     }
 }
