@@ -217,10 +217,16 @@ class GameMap implements Serializable {
                     }
                     country.setPlayer(player);
                     country.setArmies(armies);
+//                    if(country.getContinent().checkIfConqueredBy(player)){
+//                        country.getContinent().setPlayer(player);
+//                    }
                     break;
 //                    continue;
                 }
             }
+        }
+        for (Continent continent : continents) {
+            continent.updateConqueredStatus();
         }
     }
 }

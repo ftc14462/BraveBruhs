@@ -58,11 +58,14 @@ class SMSTurnProcessor implements SMSListener {
         String nextPlayerNumber = parts[9].replace("Next player#=", "");
         String gameMapText = parts[10].replace("Game Map=", "");
 
+//        game.turnNumber++;
+        game.currentGameTurn = new GameTurn(game);
         GameTurn gameTurn = game.getCurrentGameTurn();
         ArrayList<Country> attackedCountries = gameTurn.getAttackedCountries();
         attackedCountries.clear();
         for (String countryName : countriesAttacked) {
             countryName = countryName.replace("[", "").replace("]", "");
+            countryName = countryName.trim();
             attackedCountries.add(game.gameMap.getCountry(countryName));
         }
         gameTurn.setAttackedCountries(attackedCountries);
@@ -84,8 +87,10 @@ class SMSTurnProcessor implements SMSListener {
         GameMap gameMap = game.getGameMap();
         gameMap.loadSMS(gameMapText);
         gameEngine.playerTurnStageFinished(PlayerTurnStage.COLLECT_CARD);
-        NotMyTurn.notMyTurnInstance.setResult(RESULT_OK);
-        NotMyTurn.notMyTurnInstance.finish(); //close NotMyTurnWindow
+        if (NotMyTurn.notMyTurnInstance != null) {
+            NotMyTurn.notMyTurnInstance.setResult(RESULT_OK);
+            NotMyTurn.notMyTurnInstance.finish(); //close NotMyTurnWindow
+        }
 //        GameTurnController.gameTurnControllerInstance.onActivityResult(0,RESULT_OK,null);
     }
 }

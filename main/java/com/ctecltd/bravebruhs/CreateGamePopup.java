@@ -39,6 +39,9 @@ public class CreateGamePopup extends Activity {
     private String MyName = "me";
     private Game game;
     private CheckBox checkedBox;
+    private EditText myNameEdit;
+    private EditText gameIDEdit;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,9 @@ public class CreateGamePopup extends Activity {
                 GameEngine.getMapList());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        myNameEdit = findViewById(R.id.myNameEdit);
+        myNameEdit.setText(MyName);
 
         player_names_list_layout = findViewById(R.id.player_names_list_layout);
 //        playerNamesAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_multiple_choice, GameEngine.getPlayerNames());
@@ -127,6 +133,8 @@ public class CreateGamePopup extends Activity {
             increasingCardBonusRadioButton.toggle();
         }
 
+        gameIDEdit = findViewById(R.id.gameIDEdit);
+
         gameMapSpinner = findViewById(R.id.gameMapSpinner);
 //        GameMap selectedGameMap = gameEngine.getSelectedGameMap();
 //        gameMapSpinner.setSelection(selectedGameMap.ordinal());
@@ -156,8 +164,13 @@ public class CreateGamePopup extends Activity {
 //                for (int i = 1; i < players.length; i++) {
 //                    players[i] = new ComputerPlayer(playerNames[i - 1], i); //just assume computer players for now
 //                }
+                players.get(0).setName(myNameEdit.getText().toString());
                 game.setPlayers((Player[]) players.toArray(new Player[0]));
                 game.makeID();
+                id = gameIDEdit.getText().toString();
+                if (id != null && id.length() > 0) {
+                    game.setID(id);
+                }
                 game.setFixedCardBonus(fixedCardBonusRadioButton.isChecked());
                 game.gameMap = new GameMap();
                 gameEngine.assignCountriesToPlayersRandomly(game);

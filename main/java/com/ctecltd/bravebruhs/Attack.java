@@ -16,6 +16,7 @@ public class Attack extends MapActivity {
 
     @Override
     protected void doAlsoOnCreate() {
+        gameEngine.setAttackerWonABattle(false);
         ok_button.setText(OK_TEXT);
     }
 

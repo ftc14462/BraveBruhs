@@ -91,4 +91,14 @@ class Continent implements Serializable {
     public String toString() {
         return name;
     }
+
+    public void updateConqueredStatus() {
+        Country[] countries = GameEngine.getGameEngineInstance().getGameMap().getCountries(this);
+        Player player = countries[0].getPlayer();
+        if (checkIfConqueredBy(player)) {
+            setPlayer(player);
+        } else {
+            setPlayer(null);
+        }
+    }
 }

@@ -55,7 +55,7 @@ public class AttackPopup extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attack_popup);
         gameEngine = GameEngine.getGameEngineInstance();
-        gameEngine.setAttackerWonABattle(false);
+//        gameEngine.setAttackerWonABattle(false);
         attackingPlayer = gameEngine.getCurrentPlayer();
         attackerName = attackingPlayer.getName();
 

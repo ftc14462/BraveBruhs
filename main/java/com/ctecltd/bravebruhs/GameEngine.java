@@ -306,6 +306,7 @@ public class GameEngine {
             } while (getCurrentPlayer().isDead());
 //            awardPlayerArmies();
             this.currentPlayerTurnStage = PlayerTurnStage.TURN_IN_CARDS;
+            game.turnNumber++;
             game.logCurrentGameTurn();
             return;
         }
@@ -331,8 +332,8 @@ public class GameEngine {
             }
             SmsManager smsManager = SmsManager.getDefault();
             ArrayList<String> parts = smsManager.divideMessage(msg);
-//            String phoneNo = plyr.getPhoneNumber();
-            String phoneNo = "+17208786164";
+            String phoneNo = plyr.getPhoneNumber();
+//            String phoneNo = "+17208786164";
             smsManager.sendMultipartTextMessage(phoneNo, null, parts, null, null);
         }
     }
@@ -640,7 +641,7 @@ public class GameEngine {
             cardsTurnedIn();
             game.currentGameTurn.turnedInCards(turn_in_cards);
         }
-        game.turnNumber++;
+//        game.turnNumber++;
         game.currentGameTurn = new GameTurn(game);
 
 
