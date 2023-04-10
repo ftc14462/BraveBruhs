@@ -17,7 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -50,10 +49,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int EnterGameRequestCode = 1;
     protected final static int ContinueGameRequestCode = 2;
     private final static int CreateGameRequestCode = 3;
+    private final static int EnterPendingGameRequestCode = 4;
+    private final static int SetMyPlayerPopUpRequestCode = 5;
     final static int EditPlayerRequestCode = 4;
     private ListView finished_games_list;
     private Game selectedFinishedGame;
     private Button open_finished_game_button;
+    private Player myPlayer;
 
 
     @Override
@@ -139,9 +141,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
         open_finished_game_button.setEnabled(false);
 
-        open_game_button =
-
-                findViewById(R.id.open_game_button);
+        open_game_button = findViewById(R.id.open_game_button);
 //        open_game_button.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -151,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         open_game_button.setEnabled(false);
 
         initializeFields();
+
+        myPlayer = MyPlayer.tryRestoreBackup();
+        if (myPlayer == null) {
+            on_preferences(null);
+        }
     }
 
     private void checkPermissions() {
@@ -301,8 +306,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         for (Game game : games) {
             if (game.isGameOver()) {
                 finishedGamesArrayAdapter.add(game);
-            } else {
+            } else if (game.isActive()) {
                 activeGamesArrayAdapter.add(game);
+            } else {
+                pendingGamesArrayAdapter.add(game);
             }
         }
     }
@@ -313,6 +320,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void on_open_game(View view) {
-        Toast.makeText(getApplicationContext(), "Doesn't work", Toast.LENGTH_SHORT).show();
+        if (selectedPendingGame == null) {
+            return;
+        }
+//                selectedActiveGame.tryRestoreBackup();
+        Game pendingGame = Game.tryRestoreBackup(selectedPendingGame.getBackupFilename());
+        if (pendingGame != null) {
+            gameEngine.setGame(pendingGame);
+        } else {
+            gameEngine.setGame(selectedPendingGame);
+        }
+        intent = new Intent(MainActivity.this, OpenPendingGamePopUp.class);
+        startActivityForResult(intent, EnterPendingGameRequestCode);
+    }
+
+    public void on_preferences(View view) {
+        intent = new Intent(MainActivity.this, SetMyPlayerPopUp.class);
+        startActivityForResult(intent, SetMyPlayerPopUpRequestCode);
     }
 }

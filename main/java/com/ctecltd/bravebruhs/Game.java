@@ -288,4 +288,13 @@ class Game implements Serializable {
         }
         return false;
     }
+
+    public boolean isActive() {
+        for (Player player : players) {
+            if (!player.isRespondInvitation()) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

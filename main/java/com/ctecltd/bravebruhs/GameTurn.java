@@ -171,9 +171,9 @@ class GameTurn implements Serializable {
         }
         String[] parts = sms_message.split("\n");
         GameTurn gt = new GameTurn();
-        gt.gameID=parts[1].replace("GameID=","");
-        gt.turnNumber= Integer.parseInt(parts[2].replace("Turn#=",""));
-        gt.currentPlayerName=parts[3].replace("Player=","");
+        gt.gameID = parts[1].replace("GameID=", "");
+        gt.turnNumber = Integer.parseInt(parts[2].replace("Turn#=", ""));
+        gt.currentPlayerName = parts[3].replace("Player=", "");
 //        gt.turn_in_cards=Card.cardsFromSMS(parts[4].replace("Turned in cards=",""));
         return gt;
     }

@@ -77,6 +77,12 @@
         <activity
             android:name=".EditPlayerPopup"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".OpenPendingGamePopUp"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".SetMyPlayerPopUp"
+            android:screenOrientation="landscape" />
 
         <receiver
             android:name=".SmsBroadcastReceiver"

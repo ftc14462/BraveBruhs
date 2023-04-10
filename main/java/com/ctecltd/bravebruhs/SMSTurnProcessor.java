@@ -1,7 +1,13 @@
 package com.ctecltd.bravebruhs;
 
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.Telephony;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -92,5 +98,40 @@ class SMSTurnProcessor implements SMSListener {
             NotMyTurn.notMyTurnInstance.finish(); //close NotMyTurnWindow
         }
 //        GameTurnController.gameTurnControllerInstance.onActivityResult(0,RESULT_OK,null);
+    }
+
+    public static void checkTurnComplete() {
+        ContentResolver contentResolver = GameEngine.context.getContentResolver();
+        Cursor smsInboxCursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        int indexBody = smsInboxCursor.getColumnIndex(Telephony.TextBasedSmsColumns.BODY);
+        int indexAddress = smsInboxCursor.getColumnIndex(Telephony.TextBasedSmsColumns.ADDRESS);
+        int indexDate = smsInboxCursor.getColumnIndex(Telephony.TextBasedSmsColumns.DATE_SENT);
+        if (indexBody < 0 || !smsInboxCursor.moveToFirst()) return;
+        ArrayList<String> messages = new ArrayList<String>();
+        do {
+//            long ms = Long.parseLong(smsInboxCursor.getString(indexDate)); // or whatever you have read from sms
+//            Date dateFromSms = new Date(ms);
+//            String str = "SMS From: " + smsInboxCursor.getString(indexAddress) + ", " + dateFromSms +
+//                    "\n" + smsInboxCursor.getString(indexBody) + "\n";
+            String str = smsInboxCursor.getString(indexBody);
+            if (GameTurn.isSMSGameTurn(str)) {
+                messages.add(str);
+            }
+        } while (smsInboxCursor.moveToNext());
+        GameEngine gameEngine = GameEngine.getGameEngineInstance();
+        Game game = gameEngine.getGame();
+        if (game.ID == null) {
+            return;
+        }
+        int prevTurnNumber = game.turnNumber;
+        for (String msg : messages) {
+            String[] parts = msg.split("\n");
+            String gameID = parts[1].replace("GameID=", "");
+            if (!game.ID.equals(gameID)) {
+                continue;
+            }
+            int thisTurnNumber = Integer.parseInt(parts[2].replace("Turn#=", ""));
+            int gameTurnNumber = game.turnNumber;
+        }
     }
 }

@@ -18,6 +18,7 @@ public class NotMyTurn extends MapActivity {
     protected void doAlsoOnCreate() {
         notMyTurnInstance = this;
         ok_button.setText(OK_TEXT);
+        SMSTurnProcessor.checkTurnComplete();
     }
 
     @Override

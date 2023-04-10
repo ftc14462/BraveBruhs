@@ -25,6 +25,10 @@ class Player implements Serializable {
         return alive;
     }
 
+    public boolean respondInvitation = false;
+
+    public boolean acceptInvitation = false;
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -204,5 +208,24 @@ class Player implements Serializable {
         String name = parts[0];
         return name.trim();
 
+    }
+
+    public boolean isRespondInvitation() {
+        return respondInvitation;
+    }
+
+    public void setRespondInvitation(boolean respondInvitation) {
+        this.respondInvitation = respondInvitation;
+    }
+
+    public boolean isAcceptInvitation() {
+        return acceptInvitation;
+    }
+
+    public void setAcceptInvitation(boolean acceptInvitation) {
+        this.acceptInvitation = acceptInvitation;
+        if (!acceptInvitation) {
+            this.alive = false;
+        }
     }
 }
