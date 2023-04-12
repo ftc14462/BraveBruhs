@@ -16,6 +16,6 @@ class ComputerPlayer extends Player {
 
     @Override
     public String description() {
-        return this.getName() + " : computer : phone 0";
+        return this.getName() + " : phone 0 : computer";
     }
 }

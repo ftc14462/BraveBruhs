@@ -1,9 +1,6 @@
 package com.ctecltd.bravebruhs;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.DisplayMetrics;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +22,7 @@ class GameMap implements Serializable {
 //    private int[] bonusList = {5, 2, 7, 7, 5, 3};
     private Country[] countries;
     private Continent[] continents;
+    private String name;
 
     public GameMap() {
         loadMapFromTextFile();
@@ -187,7 +185,7 @@ class GameMap implements Serializable {
     public String toSMS() {
         String sms = "";
         for (Country country : countries) {
-            sms += country.getName() + "-" + country.getPlayer() + "-" + country.getArmies() + ",";
+            sms += country.getName() + "-" + country.getPlayer().getPhoneNumber() + "-" + country.getArmies() + ",";
         }
         return sms;
     }
@@ -209,9 +207,9 @@ class GameMap implements Serializable {
                 String[] parts = countryText.split("-");
                 String countryName = parts[0];
                 if (countryName.equals(country.getName())) {
-                    String playerName = parts[1];
+                    String playerNumber = parts[1];
                     int armies = Integer.parseInt(parts[2]);
-                    Player player = gameEngine.getPlayerFromName(playerName);
+                    Player player = gameEngine.getPlayerFromNumber(playerNumber);
                     if (player == null) {
                         continue;
                     }
@@ -228,5 +226,13 @@ class GameMap implements Serializable {
         for (Continent continent : continents) {
             continent.updateConqueredStatus();
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

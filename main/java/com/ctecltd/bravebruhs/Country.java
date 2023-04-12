@@ -93,7 +93,7 @@ class Country implements Serializable {
         for (Country country : countries) {
             for (String adjacentName : adjacentTo) {
                 if (country.getName().equals(adjacentName)) {
-                    if (player.getName().equals(country.getPlayer().getName())) {
+                    if (player.equals(country.getPlayer())) {
 
                     } else {
                         return false;
@@ -110,7 +110,7 @@ class Country implements Serializable {
         for (Country country : countries) {
             for (String adjacentName : adjacentTo) {
                 if (country.getName().equals(adjacentName)) {
-                    if (player.getName().equals(country.getPlayer().getName())) {
+                    if (player.equals(country.getPlayer())) {
                         return false; //found a friendly neighbor
                     }
                 }

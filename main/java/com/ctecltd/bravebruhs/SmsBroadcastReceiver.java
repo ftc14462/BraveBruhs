@@ -33,7 +33,7 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             //this will update the UI with message
             SMSObserver inst = SMSObserver.getSMSObserver();
             inst.updateSMS(smsMessageStr);
-            SMSTurnProcessor.processTurn(smsMessageStr);
+            SMSMessageProcessor.processMessage(smsMessageStr);
         }
     }
 }

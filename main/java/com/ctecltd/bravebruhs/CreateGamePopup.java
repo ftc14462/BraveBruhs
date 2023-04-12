@@ -42,6 +42,7 @@ public class CreateGamePopup extends Activity {
     //    private EditText myNameEdit;
     private EditText gameIDEdit;
     private String id;
+    private Button createButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,9 @@ public class CreateGamePopup extends Activity {
                         removePlayer(cb);
                     }
                 }
+                if (playerNameCheckBoxes.size() < 1) {
+                    createButton.setEnabled(false);
+                }
             }
         });
 
@@ -113,6 +117,7 @@ public class CreateGamePopup extends Activity {
             public void onClick(View view) {
                 String playerName = remTrailingWhiteSpace(player_name_field.getText().toString());
                 addPlayer(playerName);
+//                createButton.setEnabled(true); //should test if unique first
             }
         });
 
@@ -146,7 +151,8 @@ public class CreateGamePopup extends Activity {
 //        increasingCardBonusRadioButton.toggle();
 //        increasingCardBonusRadioButton.toggle();
 
-        Button createButton = (Button) findViewById(R.id.button_create_game);
+        createButton = (Button) findViewById(R.id.button_create_game);
+        createButton.setEnabled(false);
 
 
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -166,25 +172,39 @@ public class CreateGamePopup extends Activity {
 //                    players[i] = new ComputerPlayer(playerNames[i - 1], i); //just assume computer players for now
 //                }
 //                players.get(0).setName(myNameEdit.getText().toString());
+                Player me = players.get(0);
+                me.setAcceptInvitation(true); //it's my game, so yes I will play
+                me.setRespondInvitation(true);
                 game.setPlayers((Player[]) players.toArray(new Player[0]));
+                game.setFixedCardBonus(fixedCardBonusRadioButton.isChecked());
+                game.gameMap = new GameMap();
+                gameEngine.assignCountriesToPlayersRandomly(game);
+                game.setID(Game.TMP);
+                game.save(); //save a copy to use next time
                 game.makeID();
                 id = gameIDEdit.getText().toString();
                 if (id != null && id.length() > 0) {
                     game.setID(id);
                 }
-                game.setFixedCardBonus(fixedCardBonusRadioButton.isChecked());
-                game.gameMap = new GameMap();
-                gameEngine.assignCountriesToPlayersRandomly(game);
-                game.save();
+                game.save(); //save for real now
+                gameEngine.setGame(game);
+                gameEngine.invitePlayersToGame();
                 setResult(RESULT_OK);
                 finish();
             }
         });
 
+        Game tmpgame = Game.tryRestoreBackup(Game.TMP);
+        if (tmpgame != null) {
+            for (Player player : tmpgame.players) {
+                addPlayer(player);
+            }
+        }
+
     }
 
     private void addPlayer(String playerName) {
-        Player player = new Player(playerName, playerNameCheckBoxes.size() + 1, "0");
+        Player player = new Player(playerName, playerNameCheckBoxes.size() + 1, playerNameCheckBoxes.size() + "");
         addPlayer(player);
     }
 
@@ -221,9 +241,9 @@ public class CreateGamePopup extends Activity {
     }
 
     private Player getPlayerByDescription(String description) {
-        String playerName = Player.getPlayerNameFromDescription(description);
+        String playerNumber = Player.getPlayerNumberFromDescription(description);
         for (Player player : players) {
-            if (player.getName().equals(playerName)) {
+            if (player.getPhoneNumber().equals(playerNumber)) {
                 return player;
             }
         }
@@ -286,6 +306,7 @@ public class CreateGamePopup extends Activity {
                 }
             }
         });
+        createButton.setEnabled(true);
     }
 
     private int calcStartingArmies() {

@@ -10,10 +10,11 @@ import java.util.ArrayList;
 
 class GameTurn implements Serializable {
     static final long serialVersionUID = 42L;
-    protected static final String GAME_KEY = "<BB>V1.0\n";
+    protected static final String GAME_TURN_KEY = "<BB-Turn>V1.0\n";
+    private String currentPlayerName;
     private Game game;
     private int armiesPlaced;
-    public String currentPlayerName;
+    public String currentPlayerNumber;
     public int turnNumber;
     public String gameID;
     public Card[] turn_in_cards;
@@ -27,6 +28,7 @@ class GameTurn implements Serializable {
         this.gameID = game.getID();
         this.turnNumber = game.turnNumber + 1; //start with 1, not zero
         this.currentPlayerName = game.currentPlayer.getName();
+        this.currentPlayerNumber = game.currentPlayer.getPhoneNumber();
         this.attackedCountries = new ArrayList<Country>();
         this.armiesPlaced = game.currentPlayer.getReserveArmies();
         this.conqueredPlayers = new ArrayList<Player>();
@@ -85,7 +87,7 @@ class GameTurn implements Serializable {
             }
         }
         if (playerWon) {
-            text += currentPlayerName + " won!";
+            text += currentPlayerNumber + " won!";
         }
         return text;
     }
@@ -94,12 +96,12 @@ class GameTurn implements Serializable {
         return armiesPlaced;
     }
 
-    public String getCurrentPlayerName() {
-        return currentPlayerName;
+    public String getCurrentPlayerNumber() {
+        return currentPlayerNumber;
     }
 
-    public void setCurrentPlayerName(String currentPlayer) {
-        this.currentPlayerName = currentPlayer;
+    public void setCurrentPlayerNumber(String currentPlayer) {
+        this.currentPlayerNumber = currentPlayer;
     }
 
     public int getTurnNumber() {
@@ -148,16 +150,16 @@ class GameTurn implements Serializable {
     }
 
     public String getSMS_Message() {
-        String message = GAME_KEY;
+        String message = GAME_TURN_KEY;
         message += "GameID=" + gameID + "\n";
         message += "Turn#=" + turnNumber + "\n";
-        message += "Player=" + currentPlayerName + "\n";
+        message += "Player Number=" + currentPlayerNumber + "\n";
         message += "Turned in cards=" + turn_in_cards + "\n";
         message += "Armies placed=" + armiesPlaced + "\n";
         message += "Countries attacked=" + attackedCountries + "\n";
         message += "Got Card=" + receivedCard + "\n";
-        message += "Next player=" + game.currentPlayer + "\n";
-        message += "Next player#=" + game.currentPlayer.getPhoneNumber() + "\n";
+//        message += "Next player=" + game.currentPlayer + "\n";
+//        message += "Next player#=" + game.currentPlayer.getPhoneNumber() + "\n";
         message += "Game Map=" + game.gameMap.toSMS() + "\n";
         return message;
     }
@@ -166,23 +168,43 @@ class GameTurn implements Serializable {
         if (sms_message == null) {
             return null;
         }
-        if (!GAME_KEY.equals(sms_message.substring(0, GAME_KEY.length()))) {
+        if (!GAME_TURN_KEY.equals(sms_message.substring(0, GAME_TURN_KEY.length()))) {
             return null;
         }
         String[] parts = sms_message.split("\n");
         GameTurn gt = new GameTurn();
         gt.gameID = parts[1].replace("GameID=", "");
         gt.turnNumber = Integer.parseInt(parts[2].replace("Turn#=", ""));
-        gt.currentPlayerName = parts[3].replace("Player=", "");
+        gt.currentPlayerNumber = parts[3].replace("Player=", "");
 //        gt.turn_in_cards=Card.cardsFromSMS(parts[4].replace("Turned in cards=",""));
         return gt;
+    }
+
+    public String getCurrentPlayerName() {
+        return currentPlayerName;
+    }
+
+    public void setCurrentPlayerName(String currentPlayerName) {
+        this.currentPlayerName = currentPlayerName;
+    }
+
+    public ArrayList<Player> getConqueredPlayers() {
+        return conqueredPlayers;
+    }
+
+    public void setConqueredPlayers(ArrayList<Player> conqueredPlayers) {
+        this.conqueredPlayers = conqueredPlayers;
     }
 
     public static boolean isSMSGameTurn(String sms_message) {
         if (sms_message == null) {
             return false;
         }
-        if (!GAME_KEY.equals(sms_message.substring(0, GAME_KEY.length()))) {
+        int gameTurnKeyLength = GAME_TURN_KEY.length();
+        if (sms_message.length() < gameTurnKeyLength) {
+            return false;
+        }
+        if (!GAME_TURN_KEY.equals(sms_message.substring(0, gameTurnKeyLength))) {
             return false;
         }
         return true;

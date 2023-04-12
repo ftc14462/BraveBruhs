@@ -30,7 +30,7 @@ public class ComputerTurn extends NotMyTurn {
         }
         Country[] attacked = turn.getAttackList();
         if (attacked.length > 0) {
-            String text = turn.currentPlayerName + " attacked ";
+            String text = turn.currentPlayerNumber + " attacked ";
             for (Country country : attacked) {
                 text += country + ", ";
             }
@@ -38,7 +38,7 @@ public class ComputerTurn extends NotMyTurn {
             text += " from " + gameEngine.getActiveCountry();
             playerNameLabel.setText(text);
         } else {
-            playerNameLabel.setText(turn.currentPlayerName + " did not attack");
+            playerNameLabel.setText(turn.currentPlayerNumber + " did not attack");
         }
     }
 

@@ -49,13 +49,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private static final int EnterGameRequestCode = 1;
     protected final static int ContinueGameRequestCode = 2;
     private final static int CreateGameRequestCode = 3;
-    private final static int EnterPendingGameRequestCode = 4;
+    private final static int OpenPendingGameRequestCode = 4;
     private final static int SetMyPlayerPopUpRequestCode = 5;
     final static int EditPlayerRequestCode = 4;
     private ListView finished_games_list;
     private Game selectedFinishedGame;
     private Button open_finished_game_button;
     private Player myPlayer;
+    public static MainActivity mainActivityInstance;
 
 
     @Override
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
         GameEngine.context = getApplicationContext();
+        mainActivityInstance = this;
         gameEngine = GameEngine.getGameEngineInstance();
 
         checkPermissions();
@@ -295,14 +297,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 updateGameList();
             }
         }
+        if (resultCode == RESULT_OK && requestCode == OpenPendingGameRequestCode) {
+            updateGameList();
+            return;
+        }
     }
 
-    private void updateGameList() {
+    public void updateGameList() {
         Game[] games = gameEngine.getGameList();
         if (games == null) {
             return;
         }
         activeGamesArrayAdapter.clear();
+        pendingGamesArrayAdapter.clear();
+        finishedGamesArrayAdapter.clear();
         for (Game game : games) {
             if (game.isGameOver()) {
                 finishedGamesArrayAdapter.add(game);
@@ -331,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             gameEngine.setGame(selectedPendingGame);
         }
         intent = new Intent(MainActivity.this, OpenPendingGamePopUp.class);
-        startActivityForResult(intent, EnterPendingGameRequestCode);
+        startActivityForResult(intent, OpenPendingGameRequestCode);
     }
 
     public void on_preferences(View view) {

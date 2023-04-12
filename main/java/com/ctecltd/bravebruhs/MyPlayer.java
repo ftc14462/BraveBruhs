@@ -1,6 +1,7 @@
 package com.ctecltd.bravebruhs;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 
 import java.io.IOException;
@@ -14,16 +15,26 @@ import java.util.ArrayList;
 
 class MyPlayer extends Player {
     private static final String MYPLAYER = "MyPlayer";
+    protected static final String ME = ": -me- ";
 
     public MyPlayer(String myName, String phoneNumber) {
         super(myName, 0, phoneNumber);
-        color = "#CC0000";
+//        color = "#CC0000";
     }
 
     public boolean isMyPlayer() {
         return true;
     }
 
+    @Override
+    public String description() {
+        return super.description() + ME;
+    }
+
+//    @Override
+//    public String getColor(){
+//        return "#CC0000";
+//    }
 
     public static MyPlayer tryRestoreBackup() {
         ObjectInputStream ois = null;
@@ -61,4 +72,14 @@ class MyPlayer extends Player {
         }
     }
 
+    public static boolean isMe(Player player) {
+        MyPlayer me = tryRestoreBackup();
+//        if (me.getName().equals(player.getName()) && me.getPhoneNumber().equals(player.getPhoneNumber())) {
+//            return true;
+//        }
+        if (me.equals(player)) {
+            return true;
+        }
+        return false;
+    }
 }

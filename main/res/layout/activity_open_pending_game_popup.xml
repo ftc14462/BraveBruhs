@@ -23,6 +23,13 @@
                 android:text="Game Name"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
+            <TextView
+                android:id="@+id/players_list_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Players:"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
             <LinearLayout
                 android:id="@+id/player_names_list_layout"
                 android:layout_width="wrap_content"
@@ -35,22 +42,24 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/set_as_me_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Set to Me" />
+                <!--<Button-->
+                    <!--android:id="@+id/set_as_me_button"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Set to Me" />-->
 
                 <Button
                     android:id="@+id/reply_yes_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="on_reply_yes"
                     android:text="Reply Yes" />
 
                 <Button
                     android:id="@+id/reply_no_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="on_reply_no"
                     android:text="Reply No" />
 
                 <Button

@@ -1,14 +1,9 @@
 package com.ctecltd.bravebruhs;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.telephony.SmsManager;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -231,10 +226,10 @@ public class GameEngine {
         if (players == null) {
             return null;
         }
-        String[] names = new String[getGameEngineInstance().game.players.length];
-        for (int i = 0; i < gameEngineInstance.game.players.length; i++) {
+        String[] names = new String[players.length];
+        for (int i = 0; i < players.length; i++) {
 //            names += gameEngineInstance.players[i].getName() + "\n";
-            names[i] = gameEngineInstance.game.players[i].getName();
+            names[i] = players[i].getName();
         }
         return names;
     }
@@ -654,7 +649,7 @@ public class GameEngine {
         for (int i = 0; i < adjacents.length; i++) {
             String adjacent = adjacents[i];
             Country adjacentCountry = game.gameMap.getCountry(adjacent);
-            if (!player.getName().equals(adjacentCountry.getPlayer().getName())) {
+            if (!player.equals(adjacentCountry.getPlayer())) {
                 game.currentGameTurn.addAttack(adjacentCountry);
                 evenOddsAttack(country, adjacentCountry);
             }
@@ -732,6 +727,9 @@ public class GameEngine {
     public Game[] getGameList() {
         File dir = context.getFilesDir();
         File[] files = dir.listFiles();
+        if (files == null) {
+            return null;
+        }
         if (files.length < 1) {
             return null;
         }
@@ -740,6 +738,9 @@ public class GameEngine {
             if (Game.isGameBackup(file)) {
                 Game game = Game.tryRestoreBackup(file.getName());
                 if (game == null) {
+                    continue;
+                }
+                if (game.getID().equals(Game.TMP)) {
                     continue;
                 }
                 arrayList.add(game);
@@ -779,15 +780,48 @@ public class GameEngine {
         return null;
     }
 
-    public Player getPlayerFromName(String playerName) {
-        if (playerName == null) {
+    public Player getPlayerFromNumber(String playerNumber) {
+        if (playerNumber == null) {
             return null;
         }
         for (Player player : game.players) {
-            if (player.getName().equals(playerName)) {
+            if (player.getPhoneNumber().equals(playerNumber)) {
                 return player;
             }
         }
         return null;
+    }
+
+    public void invitePlayersToGame() {
+        Player[] players = game.players;
+        for (Player player : players) {
+            if (player.isMyPlayer()) {
+                continue;
+            }
+            String msg = game.getSMSInviteMessage();
+            SmsManager smsManager = SmsManager.getDefault();
+            ArrayList<String> parts = smsManager.divideMessage(msg);
+            String phoneNo = player.getPhoneNumber();
+//            String phoneNo = "+17208786164";
+            smsManager.sendMultipartTextMessage(phoneNo, null, parts, null, null);
+
+        }
+
+    }
+
+    public void sendReply() {
+        Player[] players = game.players;
+        for (Player player : players) {
+            if (player.isMyPlayer()) {
+                continue;
+            }
+            String msg = game.getMySMSReplyMessage();
+            SmsManager smsManager = SmsManager.getDefault();
+            ArrayList<String> parts = smsManager.divideMessage(msg);
+            String phoneNo = player.getPhoneNumber();
+//            String phoneNo = "+17208786164";
+            smsManager.sendMultipartTextMessage(phoneNo, null, parts, null, null);
+
+        }
     }
 }

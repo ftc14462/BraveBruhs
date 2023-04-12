@@ -77,6 +77,7 @@ class Player implements Serializable {
 
     public void setID(int ID) {
         this.ID = ID;
+        this.color = COLORS[ID];
     }
 
 //    public ArrayList<Country> getCountries() {
@@ -136,7 +137,7 @@ class Player implements Serializable {
     @Override
     public boolean equals(Object o) {
         try {
-            return this.name.equals(((Player) o).name);
+            return this.phoneNumber.equals(((Player) o).phoneNumber);
         } catch (Exception e) {
             return false;
         }
@@ -180,7 +181,13 @@ class Player implements Serializable {
     }
 
     public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+        if (phoneNumber == null) {
+            return;
+        }
+        if (phoneNumber.length() < 1) {
+            return;
+        }
+        this.phoneNumber = phoneNumber.replace(" ", "");
     }
 
     public boolean isComputerPlayer() {
@@ -197,7 +204,7 @@ class Player implements Serializable {
     }
 
     public String description() {
-        return this.getName() + " : human : phone " + this.phoneNumber;
+        return this.name + " : phone " + this.phoneNumber;
     }
 
     public static String getPlayerNameFromDescription(String description) {
@@ -207,7 +214,6 @@ class Player implements Serializable {
         String[] parts = description.split(":");
         String name = parts[0];
         return name.trim();
-
     }
 
     public boolean isRespondInvitation() {
@@ -227,5 +233,64 @@ class Player implements Serializable {
         if (!acceptInvitation) {
             this.alive = false;
         }
+    }
+
+    public static Player getPlayerFromDescription(String description) {
+        if (description == null) {
+            return null;
+        }
+        String[] parts = description.split(":");
+        if (parts.length < 2) {
+            return null;
+        }
+        String name = parts[0].trim();
+        String number = parts[1].replace(MyPlayer.ME, "").replace(" phone ", "");
+        Player player = new Player(name, 0, number);
+        return player;
+    }
+
+    public String reply() {
+        String reply = "no reply";
+        if (isRespondInvitation()) {
+            if (isAcceptInvitation()) {
+                reply = "yes";
+            } else {
+                reply = "no";
+            }
+        }
+        return reply;
+    }
+
+    public static String getResponseFromDescription(String playerDescription) {
+        return null;
+    }
+
+    public void setReplyFromString(String playerReply) {
+        if (playerReply.equals("yes")) {
+            respondInvitation = true;
+            acceptInvitation = true;
+            return;
+        }
+        if (playerReply.equals("no")) {
+            respondInvitation = true;
+            acceptInvitation = false;
+            return;
+        }
+        if (playerReply.equals("no reply")) {
+            respondInvitation = false;
+            acceptInvitation = false;
+        }
+    }
+
+    public static String getPlayerNumberFromDescription(String description) {
+        if (description == null) {
+            return null;
+        }
+        String[] parts = description.split(":");
+        if (parts.length < 2) {
+            return null;
+        }
+        String number = parts[1].replace(" phone ", "").trim();
+        return number;
     }
 }

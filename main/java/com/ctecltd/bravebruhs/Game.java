@@ -20,7 +20,10 @@ import static com.ctecltd.bravebruhs.GameEngine.STARTING_BONUS;
 
 class Game implements Serializable {
     static final long serialVersionUID = 42L;
+    protected static final String GAME_INVITE_KEY = "<BB-Invite>V1.0\n";
     private static final String BACKUP = "_backup.bk";
+    private static final String GAME_REPLY_KEY = "<BB-Reply>V1.0\n";
+    public static final String TMP = "tmp";
     //    private final GameEngine gameEngine;
     String ID;
     //    Friend[] friends;
@@ -296,5 +299,67 @@ class Game implements Serializable {
             }
         }
         return true;
+    }
+
+    public String getSMSInviteMessage() {
+        String msg = GAME_INVITE_KEY;
+        msg += ID + "\n";
+        msg += "Start Players:\n";
+        for (Player player : players) {
+            msg += player.description() + "\n";
+        }
+        msg += "End Players\n";
+        msg += "Fixed Card Bonus=" + fixedCardBonus + "\n";
+        msg += "Starting Armies=" + startingArmies + "\n";
+        msg += "Map=" + gameMap.toSMS() + "\n";
+        return msg;
+    }
+
+    public static boolean isSMSGameInvite(String sms_message) {
+        if (sms_message == null) {
+            return false;
+        }
+        int keyLength = GAME_INVITE_KEY.length();
+        if (sms_message.length() < keyLength) {
+            return false;
+        }
+        if (!GAME_INVITE_KEY.equals(sms_message.substring(0, keyLength))) {
+            return false;
+        }
+        return true;
+    }
+
+    public void setPlayers(ArrayList<Player> playerArrayList) {
+        if (playerArrayList == null) {
+            players = null;
+        }
+        players = playerArrayList.toArray(new Player[0]);
+    }
+
+    public static boolean isSMSGameReply(String sms_message) {
+        if (sms_message == null) {
+            return false;
+        }
+        int keyLength = GAME_REPLY_KEY.length();
+        if (sms_message.length() < keyLength) {
+            return false;
+        }
+        if (!GAME_REPLY_KEY.equals(sms_message.substring(0, GAME_REPLY_KEY.length()))) {
+            return false;
+        }
+        return true;
+    }
+
+    public String getMySMSReplyMessage() {
+        String msg = GAME_REPLY_KEY;
+        msg += ID + "\n";
+        for (Player player : players) {
+            if (player.isMyPlayer()) {
+                msg += player.description() + "\n";
+                msg += player.reply();
+                break;
+            }
+        }
+        return msg;
     }
 }
