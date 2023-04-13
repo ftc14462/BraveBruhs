@@ -73,7 +73,13 @@ class MyPlayer extends Player {
     }
 
     public static boolean isMe(Player player) {
+        if (player == null) {
+            return false;
+        }
         MyPlayer me = tryRestoreBackup();
+        if (me == null) {
+            return false;
+        }
 //        if (me.getName().equals(player.getName()) && me.getPhoneNumber().equals(player.getPhoneNumber())) {
 //            return true;
 //        }

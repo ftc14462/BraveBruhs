@@ -169,6 +169,9 @@ class Player implements Serializable {
         if (!alive) {
             status += " kaput.";
         }
+        if (!acceptInvitation) {
+            status += " didn't accept.";
+        }
         return status;
     }
 

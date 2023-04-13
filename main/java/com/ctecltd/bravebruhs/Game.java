@@ -21,7 +21,7 @@ import static com.ctecltd.bravebruhs.GameEngine.STARTING_BONUS;
 class Game implements Serializable {
     static final long serialVersionUID = 42L;
     protected static final String GAME_INVITE_KEY = "<BB-Invite>V1.0\n";
-    private static final String BACKUP = "_backup.bk";
+    protected static final String BACKUP = "_backup.bk";
     private static final String GAME_REPLY_KEY = "<BB-Reply>V1.0\n";
     public static final String TMP = "tmp";
     //    private final GameEngine gameEngine;
@@ -362,4 +362,17 @@ class Game implements Serializable {
         }
         return msg;
     }
+
+    public void checkAllReplyNo() {
+        for (int i = 1; i < players.length; i++) { //start at 1 - first player owns game so replies yes
+            if (players[i].isAcceptInvitation()) {
+                return;
+            }
+            if (!players[i].isRespondInvitation()) {
+                return;
+            }
+        }
+        gameOver = true; //everyone replied no (except for owner)
+    }
+
 }

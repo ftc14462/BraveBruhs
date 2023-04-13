@@ -223,9 +223,7 @@ class GameMap implements Serializable {
                 }
             }
         }
-        for (Continent continent : continents) {
-            continent.updateConqueredStatus();
-        }
+        gameEngine.updateConqueredContinents();
     }
 
     public void setName(String name) {

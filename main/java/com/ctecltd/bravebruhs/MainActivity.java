@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void initializeFields() {
+        checkForInvitesAndReplies();
         updateGameList();
 //        Friend matt = new Friend("Matthew", "7203919024");
 ////        MyPlayer myPlayer = new MyPlayer("weirdo", "7208786164");
@@ -264,6 +265,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 //        friendsArrayAdapter.add(matt);
 //        friendsArrayAdapter.notifyDataSetChanged();
+    }
+
+    private void checkForInvitesAndReplies() {
+        SMSMessageProcessor.checkForInvitesAndReplies();
     }
 
     @Override

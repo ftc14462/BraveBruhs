@@ -2,10 +2,15 @@ package com.ctecltd.bravebruhs;
 
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.Telephony;
+import android.util.Log;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;
@@ -67,10 +72,14 @@ class SMSMessageProcessor implements SMSListener {
         }
         for (Game game : games) {
             if (game.getID().equals(gameID)) {
+                if (game.isActive()) {
+                    return; //we're already playing this game. don't need to reply
+                }
                 String respondingPlayerNumber = Player.getPlayerNumberFromDescription(playerDescription);
                 for (Player player : game.players) {
                     if (player.getPhoneNumber().equals(respondingPlayerNumber)) {
                         player.setReplyFromString(playerReply);
+                        game.checkAllReplyNo();
                         game.save();
                         MainActivity.mainActivityInstance.updateGameList();
                         return;
@@ -90,6 +99,9 @@ class SMSMessageProcessor implements SMSListener {
             return;
         }
         if (gameID.length() < 1) {
+            return;
+        }
+        if (checkFileExists(gameID + Game.BACKUP)) {
             return;
         }
         Game game = new Game();
@@ -132,6 +144,14 @@ class SMSMessageProcessor implements SMSListener {
         game.setGameMap(gameMap);
         gameMap.loadSMS(mapString);
         game.save();
+    }
+
+    private static boolean checkFileExists(String filename) {
+        Context context = GameEngine.context;
+        File file = context.getFileStreamPath(filename);
+        boolean exists = file.exists();
+        return exists;
+
     }
 
     protected static void processTurn(String sms_message) {
@@ -240,6 +260,49 @@ class SMSMessageProcessor implements SMSListener {
             if (thisTurnNumber >= gameTurnNumber) {
                 processMessage(msg);
             }
+        }
+    }
+
+    public static void checkForInvitesAndReplies() {
+        ContentResolver contentResolver = GameEngine.context.getContentResolver();
+        Cursor smsInboxCursor = contentResolver.query(Uri.parse("content://sms/inbox"), null, null, null, null);
+        int indexBody = smsInboxCursor.getColumnIndex(Telephony.TextBasedSmsColumns.BODY);
+        int indexAddress = smsInboxCursor.getColumnIndex(Telephony.TextBasedSmsColumns.ADDRESS);
+        int indexDate = smsInboxCursor.getColumnIndex(Telephony.TextBasedSmsColumns.DATE_SENT);
+        if (indexBody < 0 || !smsInboxCursor.moveToFirst()) return;
+        ArrayList<String> inviteMessages = new ArrayList<String>();
+        ArrayList<String> replyMessages = new ArrayList<String>();
+        do {
+//            long ms = Long.parseLong(smsInboxCursor.getString(indexDate)); // or whatever you have read from sms
+//            Date dateFromSms = new Date(ms);
+//            String str = "SMS From: " + smsInboxCursor.getString(indexAddress) + ", " + dateFromSms +
+//                    "\n" + smsInboxCursor.getString(indexBody) + "\n";
+            String str = smsInboxCursor.getString(indexBody);
+            if (Game.isSMSGameInvite(str)) {
+                inviteMessages.add(str);
+            }
+            if (Game.isSMSGameReply(str)) {
+                replyMessages.add(str);
+            }
+        } while (smsInboxCursor.moveToNext());
+        for (String invite : inviteMessages) {
+            try {
+                processGameInvite(invite);
+            } catch (MyPlayerNotInvitedException e) {
+                e.printStackTrace();
+            }
+        }
+        for (String reply : replyMessages) {
+            try {
+                processGameReply(reply);
+            } catch (IncorrectGameReplyFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        GameEngine gameEngine = GameEngine.getGameEngineInstance();
+        Game game = gameEngine.getGame();
+        if (game.ID == null) {
+            return;
         }
     }
 }

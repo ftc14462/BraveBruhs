@@ -173,6 +173,7 @@ public class GameEngine {
                 playerID = 0;
             }
         }
+        updateConqueredContinents();
     }
 
     public void assignCountriesToPlayers() {

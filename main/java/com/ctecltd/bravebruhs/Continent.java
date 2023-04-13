@@ -61,6 +61,9 @@ class Continent implements Serializable {
     }
 
     public boolean checkIfConqueredBy(Player checkPlayer) {
+        if (checkPlayer == null) {
+            return false;
+        }
         Country[] countries = GameEngine.getGameEngineInstance().getGameMap().getCountries(this);
         for (Country country : countries) {
             if (!(country.getPlayer().equals(checkPlayer))) {
